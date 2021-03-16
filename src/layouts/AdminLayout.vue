@@ -3,29 +3,28 @@
     <div class="container">
       <div class="header">
         <div class="logo" @click="goToHome()">
-          <img src="../assets/images/blackpink.png" alt="">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png" alt="">
         </div>
         <div class="avatar" @click="openSetting()">
           <el-avatar>
-            <img src="../assets/images/mandoo.jpg" alt="">
+            <img src="https://lh3.googleusercontent.com/-5fAshoFGq7M/W9NftV8GiKI/AAAAAAAACI4/VJ60JbnPmnkwZ4sEcXTKDdN2ZUBO1OUPQCEwYBhgLKtQDAL1OcqxI_mvzWIoyAusUEkm31QGcE8Oe1RdBSL2Z-5t-snh4qTqTv_opU4LzVsQU-njwndsOmNlVyIsRulMIFK3xUHUWJlkDobuY6UT0LeAt0F32pvynWd09l6LF1Rz6tF6dlMrTgQbNwqjwS9ZZxancdYJHWLX6Gy-2MN5KNsk0cO2cQe1sV1wUgkpKMh2qQE7zpRlll2SUXROlcNXpA1LunW3rRVxvYVlWh3EvHtiovDqmJR3PRmubWw29BWyCA2_AXuzk7IMZamCT8YV_bneTsj54Vsn4rjQajtyF75KL5XgSv_RPfbtZHS09Ed5gqS1TEiOhsXyfKEXKXoLcNFNS1WwGauWTKA1AMIk3BTV8axtAsZq2AQKYwO58Y4vLFAypHHbkTAPbctF-5YdMhEwN9GphKLppx0zo17V0f-MAuotxBPbxn0osczz-6lmSOyaygieZbTzcov6AGdfR_q6CYF0HtfAHt_u0ezTHYSUjtnpZRhNnHMuAhU2qwrUFv3aYuBBE72Y3IZRweyWeLI__D8w54bI0tJ5Vk1kIaw4A-Jo5oXhLLCyRVieEsrRlCSgfp5RpWFYF4ldm2PlfUyq_8-ERPfH5gCXElmeGLo36K1-oMOvNvYIG/w140-h140-p/97ac7c16-6fdb-4d44-abc8-d37d219bd229" alt="">
           </el-avatar>
         </div>
         <div class="user-setting" ref="usersetting">
           <div class="user-top">
-            Tài khoản
-            <hr>
+            
           </div>
           <div class="user-info">
             <el-avatar>
-              <img src="../assets/images/mandoo.jpg" alt="">
+              <img src="https://lh3.googleusercontent.com/-5fAshoFGq7M/W9NftV8GiKI/AAAAAAAACI4/VJ60JbnPmnkwZ4sEcXTKDdN2ZUBO1OUPQCEwYBhgLKtQDAL1OcqxI_mvzWIoyAusUEkm31QGcE8Oe1RdBSL2Z-5t-snh4qTqTv_opU4LzVsQU-njwndsOmNlVyIsRulMIFK3xUHUWJlkDobuY6UT0LeAt0F32pvynWd09l6LF1Rz6tF6dlMrTgQbNwqjwS9ZZxancdYJHWLX6Gy-2MN5KNsk0cO2cQe1sV1wUgkpKMh2qQE7zpRlll2SUXROlcNXpA1LunW3rRVxvYVlWh3EvHtiovDqmJR3PRmubWw29BWyCA2_AXuzk7IMZamCT8YV_bneTsj54Vsn4rjQajtyF75KL5XgSv_RPfbtZHS09Ed5gqS1TEiOhsXyfKEXKXoLcNFNS1WwGauWTKA1AMIk3BTV8axtAsZq2AQKYwO58Y4vLFAypHHbkTAPbctF-5YdMhEwN9GphKLppx0zo17V0f-MAuotxBPbxn0osczz-6lmSOyaygieZbTzcov6AGdfR_q6CYF0HtfAHt_u0ezTHYSUjtnpZRhNnHMuAhU2qwrUFv3aYuBBE72Y3IZRweyWeLI__D8w54bI0tJ5Vk1kIaw4A-Jo5oXhLLCyRVieEsrRlCSgfp5RpWFYF4ldm2PlfUyq_8-ERPfH5gCXElmeGLo36K1-oMOvNvYIG/w140-h140-p/97ac7c16-6fdb-4d44-abc8-d37d219bd229" alt="">
             </el-avatar>
             <div class="name-mail">
-              <div class="name">Nguyễn Quang Thành</div>
+              <div class="name">Lê Quang Hùng</div>
               <br>
-              <span class="email">thanhnq@zent.vn</span>
+              <span class="email">hungleip9@gmail.com</span>
             </div>
           </div>
-          <hr>
+          
           <div class="setting" @click="openProfile()">
             Cài đặt tài khoản
           </div>
@@ -55,7 +54,7 @@ export default {
       else this.$refs.usersetting.style.visibility = 'visible'
     },
     openProfile() {
-      this.$router.push('profile')
+      this.$router.push('/path/profile')
     },
     goToHome() {
       this.$router.push('home')
@@ -75,14 +74,14 @@ export default {
 <style lang="scss" scoped>
   .container {
     height: 100vh;
-    background-image: url("../assets/images/bg-trello-2.jpg");
+    background-image: url("https://wallpaperaccess.com/full/4584352.jpg");
     background-size: cover;
     .header {
       width: 100%;
-      height: 40px;
+      height: 55px;
       padding: 4px;
       box-sizing: border-box;
-      background: rgba(220 203 211 / 47%);
+      background-image: linear-gradient(to bottom right, #648455, #5a9e98);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -91,7 +90,8 @@ export default {
         opacity: 0.5;
         cursor: pointer;
         img {
-          width: 100%;
+          width: 80px;
+          height: 60px;
         }
       }
       .logo:hover {
@@ -104,15 +104,20 @@ export default {
         right: 5px;
         cursor: pointer;
         .el-avatar {
-          width: 32px;
-          height: 32px;
+          width: 50px;
+          height: 50px;
           line-height: 32px;
+          position: absolute;
+          top: -9px;
+          right: 10px;
+          border: 1px solid white;
+          box-shadow: 0 0 15px black;
         }
       }
       .user-setting {
         position: absolute;
-        top: 45px;
-        right: 5px;
+        top: 55px;
+        right: 2px;
         background: #ffffff;
         visibility: hidden;
         width: 290px;

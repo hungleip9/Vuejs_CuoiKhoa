@@ -12,10 +12,19 @@
             <input type="text" v-model="card.title" class="detail-card-title" @keydown.enter="updateCardName">
           </div>
           <el-row>
-            <el-col :span="2">a</el-col>
+            <el-col :span="2" style="color:white">a</el-col>
             <el-col :span="22">
               <div v-if="card.labels" class="">
                 <div>Nhãn</div>
+                <div class="list-box-label-mini">
+                  <div class="box-label-mini box-label-mini-green" ref="miniGreen"></div>
+                  <div class="box-label-mini box-label-mini-orange" ref="miniOrange"></div>
+                  <div class="box-label-mini box-label-mini-yellow" ref="miniYellow"></div>
+                  <div class="box-label-mini box-label-mini-red" ref="miniRed"></div>
+                  <div class="box-label-mini box-label-mini-purple" ref="miniPurple"></div>
+                  <div class="box-label-mini box-label-mini-blue" ref="miniBlue"></div>
+                  <div class="box-label-mini box-label-mini-plus" @click="openBoxLabel"><i class="el-icon-plus"></i></div>
+                </div>
                 <el-tag v-for="(label, index) in card.labels" :key="index"
                         :color="label.color"
                         effect="dark"
@@ -77,27 +86,29 @@
               trigger="click">
             <div class="add-labels">
               <div class="add-labels-header">
-                Nhãn
-              </div>
-              <div class="card-action-btn" style="justify-content: center">
-                Thêm nhãn mới
+                Thêm nhãn
               </div>
               <div class="form-add-labels">
-                Tên
-                <br>
-                <input type="text" class="label-name" ref="inputLabel" v-model="labelName">
-                <p style="margin: 0 0 5px 0">Chọn một màu</p>
-                <div class="labels-color" style="background-color: #61bd4f" @click="selectlabelColor('#61bd4f')"><i class="check-color el-icon-check"></i></div>
-                <div class="labels-color" style="background-color: #f2d600" @click="selectlabelColor('#f2d600')"><i class="check-color el-icon-check"></i></div>
-                <div class="labels-color" style="background-color: #ff9f1a" @click="selectlabelColor('#ff9f1a')"><i class="check-color el-icon-check"></i></div>
-                <div class="labels-color" style="background-color: #eb5a46" @click="selectlabelColor('#eb5a46')"><i class="check-color el-icon-check"></i></div>
-                <div class="labels-color" style="background-color: #c377e0" @click="selectlabelColor('#c377e0')"><i class="check-color el-icon-check"></i></div>
-                <div class="labels-color" style="background-color: #0079bf" @click="selectlabelColor('#0079bf')"><i class="check-color el-icon-check"></i></div>
-                <div class="labels-color" style="background-color: #00c2e0" @click="selectlabelColor('#00c2e0')"><i class="check-color el-icon-check"></i></div>
-                <div class="labels-color" style="background-color: #51e898" @click="selectlabelColor('#51e898')"><i class="check-color el-icon-check"></i></div>
-                <div class="labels-color" style="background-color: #ff78cb" @click="selectlabelColor('#ff78cb')"><i class="check-color el-icon-check"></i></div>
-                <div class="labels-color" style="background-color: #344563" @click="selectlabelColor('#344563')"><i class="check-color el-icon-check"></i></div>
-                <el-button class="btn-save-label" type="success" size="small" @click="addLabel">Tạo mới</el-button>
+                <p style="margin: 0 0 5px 0">Nhãn</p>
+                <div class="box-color-label green" @click="green">
+                 <i class="el-icon-check" ref="iconCheckGreen"></i>
+               </div>
+               <div class="box-color-label yellow" @click="yellow">
+                 <i class="el-icon-check" ref="iconCheckYellow"></i>
+               </div>
+               <div class="box-color-label orange" @click="orange">
+                 <i class="el-icon-check" ref="iconCheckOrange"></i>
+               </div>
+               <div class="box-color-label red" @click="red">
+                 <i class="el-icon-check" ref="iconCheckRed"></i>
+               </div>
+               <div class="box-color-label purple" @click="purple">
+                 <i class="el-icon-check" ref="iconCheckPurple"></i>
+               </div>
+               <div class="box-color-label blue" @click="blue">
+                 <i class="el-icon-check" ref="iconCheckBlue"></i>
+               </div>
+                <!-- <el-button class="btn-save-label" type="success" size="small" @click="addLabel">Tạo mới</el-button> -->
               </div>
             </div>
             <div class="card-action-btn" slot="reference">
@@ -187,6 +198,72 @@ name: "Card",
     }
   },
   methods: {
+    green(){
+      let css =this.$refs.miniGreen.style.display
+      let mini = this.$refs.iconCheckGreen.style.display
+      if(css == 'inline-block' && mini == 'inline-block'){
+          this.$refs.miniGreen.style.display = 'none';
+          this.$refs.iconCheckGreen.style.display = 'none';
+      }else{
+          this.$refs.miniGreen.style.display = 'inline-block';
+          this.$refs.iconCheckGreen.style.display = 'inline-block';
+      }
+    },
+    yellow(){
+      let mini =this.$refs.miniYellow.style.display
+      let css =this.$refs.iconCheckYellow.style.display
+      if(css == 'inline-block' && mini == 'inline-block'){
+          this.$refs.miniYellow.style.display = 'none';
+          this.$refs.iconCheckYellow.style.display = 'none';
+      }else{
+          this.$refs.miniYellow.style.display = 'inline-block';
+          this.$refs.iconCheckYellow.style.display = 'inline-block';
+      }
+    },
+    orange(){
+      let mini =this.$refs.miniOrange.style.display
+      let css =this.$refs.iconCheckOrange.style.display
+      if(css == 'inline-block' && mini == 'inline-block'){
+        this.$refs.miniOrange.style.display = 'none';
+          this.$refs.iconCheckOrange.style.display = 'none';
+      }else{
+        this.$refs.miniOrange.style.display = 'inline-block';
+          this.$refs.iconCheckOrange.style.display = 'inline-block';
+      }
+    },
+    red(){
+      let mini =this.$refs.miniRed.style.display
+      let css =this.$refs.iconCheckRed.style.display
+      if(css == 'inline-block' && mini == 'inline-block'){
+        this.$refs.miniRed.style.display = 'none';
+          this.$refs.iconCheckRed.style.display = 'none';
+      }else{
+        this.$refs.miniRed.style.display = 'inline-block';
+          this.$refs.iconCheckRed.style.display = 'inline-block';
+      }
+    },
+    purple(){
+      let mini =this.$refs.miniPurple.style.display
+      let css =this.$refs.iconCheckPurple.style.display
+      if(css == 'inline-block' && mini == 'inline-block'){
+        this.$refs.miniPurple.style.display = 'none';
+          this.$refs.iconCheckPurple.style.display = 'none';
+      }else{
+        this.$refs.miniPurple.style.display = 'inline-block';
+          this.$refs.iconCheckPurple.style.display = 'inline-block';
+      }
+    },
+    blue(){
+      let mini =this.$refs.miniBlue.style.display
+      let css =this.$refs.iconCheckBlue.style.display
+      if(css == 'inline-block' && mini == 'inline-block'){
+        this.$refs.miniBlue.style.display = 'none';
+          this.$refs.iconCheckBlue.style.display = 'none';
+      }else{
+        this.$refs.miniBlue.style.display = 'inline-block';
+          this.$refs.iconCheckBlue.style.display = 'inline-block';
+      }
+    },
     openDetailCard() {
       this.dialogVisible = true
       api.getLabels().then((response) => {
@@ -323,6 +400,7 @@ name: "Card",
       border: none;
       height: 30px;
       width: 90%;
+      outline: none;
     }
   }
   #description {
@@ -361,6 +439,7 @@ name: "Card",
       font-family: Arial;
       font-size: 14px;
       display: none;
+      outline: none;
     }
     .input-sub-check-list {
       width: 100%;
@@ -476,4 +555,111 @@ name: "Card",
       }
     }
   }
+  .box-color-label {
+        width: 88%;
+        height: 25px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-weight: 700;
+        color: white;
+        text-align: right;
+        margin-bottom: 4px;
+        i {
+          height: 20px;
+          font-size: 16px;
+          line-height: 20px;
+          width: 20px;
+          padding: 5px 10px 0 0 ;
+          font-weight: 700;
+          display: none;
+          padding-left: 220px;
+        }
+      }
+  .green{
+    background-color: #61bd4f;
+  }
+  .green:hover {
+    box-shadow: -8px 0 #519839;
+  }
+  .yellow {
+    background-color: #f2d600;
+    
+  }
+  .yellow:hover {
+    box-shadow: -8px 0 #d9b51c;
+  }
+  .orange {
+    background-color: #ff9f1a;
+  }
+  .orange:hover {
+    box-shadow: -8px 0 #cd8313;
+  }
+  .red {
+    background-color: #eb5a46;
+  }
+  .red:hover {
+    box-shadow: -8px 0 #b04632;
+  }
+  .purple {
+    background-color: #c377e0;
+  }
+  .purple:hover {
+    box-shadow: -8px 0 #89609e;
+  }
+  .blue {
+    background-color: #0079bf;
+  }
+  .blue:hover {
+    box-shadow: -8px 0 #055a8c;
+  }
+  .list-box-label-mini {
+        width: 100%;
+        height: 30px;
+        .box-label-mini {
+            width: 40px;
+            height: 30px;
+            margin-right: 10px;
+            display: inline-block;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .box-label-mini-red {
+            background-color: red;
+            display: none;
+        }
+        .box-label-mini-orange {
+            background-color: #ff9f1a;
+            display: none;
+        }
+        .box-label-mini-yellow {
+            background-color: #f2d600;
+            display: none;
+        }
+        .box-label-mini-green {
+            background-color: #61bd4f;
+            display: none;
+        }
+        .box-label-mini-purple {
+          background-color: #c377e0;
+          display: none;
+        }
+        .box-label-mini-blue {
+            background-color: #0079bf;
+            display: none;
+        }
+        .box-label-mini-plus {
+          background-color: rgba(9,30,66,.04);
+          color: #42526e;
+          font-size: 16px;
+          height: 16px;
+          line-height: 16px;
+          padding: 8px;
+          width: 26px;
+          text-align: center;
+          position: absolute;
+        }
+        .box-label-mini-plus:hover {
+          background-color: #dee0e2;
+        }
+    }
 </style>

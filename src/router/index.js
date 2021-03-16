@@ -5,7 +5,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/path',
     name: 'Home',
     component: () => import('../layouts/AdminLayout'),
     children: [
@@ -15,17 +15,17 @@ const routes = [
         component: () => import('../views/Home')
       },
       {
-        path: '/profile',
+        path: 'profile',
         component: () => import('../views/UserSetting')
       },
     ]
   },
   {
-    path: '/path',
+    path: '/',
     component: () => import('../layouts/LoginLayout'),
     children: [
       {
-        path: 'login',
+        path: '/',
         name: 'Login',
         component: () => import('../views/LoginForm')
       },
@@ -35,6 +35,7 @@ const routes = [
       },
       {
         path: 'register',
+        name: 'Register',
         component: () => import('../views/Register')
       },
     ]

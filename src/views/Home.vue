@@ -113,7 +113,7 @@ export default {
         margin: 7px;
         padding: 7px;
         float: left;
-        background: rgba(220 203 211 / 47%);
+        background-image: linear-gradient(to bottom right, #648455, #5a9e98);
         color: #ffffff;
         border-radius: 4px;
         cursor: pointer;
@@ -130,9 +130,10 @@ export default {
         }
       }
       .listWrap {
+        margin-top: 10px;
         padding: 10px 8px;
         text-align: left;
-        background: rgba(220 203 211 / 47%);
+        background-image: linear-gradient(to bottom right, #648455, #5a9e98);
         border-radius: 4px;
         width: 272px;
         box-sizing: border-box;

@@ -1,7 +1,7 @@
 <template>
   <div class="loginWrap">
     <div class="logo">
-      <img src="../assets/images/blackpink.png" alt="">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png" alt="">
     </div>
     <div class="title">Đăng kí tài khoản</div>
     <el-form :model="ruleForm" :label-position="label" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
@@ -17,21 +17,14 @@
         <label style="float: left" ><span style="color: #f54b5e">*</span> Xác nhận mật khẩu</label>
         <el-input type="password" v-model="ruleForm.checkPass"></el-input>
       </el-form-item>
-      <el-form-item prop="gender">
-        <label style="float: left" >Giớ tính</label>
-        <el-radio-group v-model="ruleForm.gender">
-          <el-radio label="Nam"></el-radio>
-          <el-radio label="Nữ"></el-radio>
-          <el-radio label="Khác"></el-radio>
-        </el-radio-group>
-      </el-form-item>
     </el-form>
-    <button class="btn-login" @click="register('ruleForm')">
-      ĐĂNG KÍ
-    </button>
     <div class="register">
       <el-button @click="login()">Đăng nhập</el-button>
     </div>
+    <button class="btn-login" @click="register('ruleForm')">
+      ĐĂNG KÍ
+    </button>
+    
   </div>
 </template>
 
@@ -53,7 +46,6 @@ export default {
         email: '',
         password: '',
         checkPass: '',
-        gender: '',
       },
       rules: {
         email: [
@@ -83,7 +75,7 @@ export default {
             type: 'success',
           });
           console.log(this.ruleForm)
-          this.$router.push('/home')
+          this.$router.push('/path/home')
         } else {
           this.$message({
             message: 'Đăng kí thất bại!',
@@ -94,7 +86,7 @@ export default {
       });
     },
     login() {
-      this.$router.push('/path/login')
+      this.$router.push('/')
     }
   }
 }
@@ -110,7 +102,7 @@ export default {
   .logo {
     width: 100%;
     img {
-      width: 200px;
+      width: 100px;
     }
   }
   .title {
@@ -137,7 +129,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    
     .el-button {
+      margin-left: 322px;
       border: 0;
       color: #0080dd;
       padding: 7px;
@@ -146,7 +140,7 @@ export default {
   .btn-login {
     width: 100%;
     height: 50px;
-    background-color: #f4a7bb;
+    background-image: linear-gradient(to bottom right, #648455, #5a9e98);
     color: #ffffff;
     border: 0;
     border-radius: 4px;

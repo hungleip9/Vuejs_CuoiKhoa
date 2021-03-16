@@ -1,7 +1,7 @@
 <template>
   <div class="loginWrap">
     <div class="logo">
-      <img src="../assets/images/blackpink.png" alt="">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png" alt="">
     </div>
     <el-form :model="ruleForm" :label-position="label" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
       <el-form-item prop="email">
@@ -14,14 +14,12 @@
       </el-form-item>
     </el-form>
     <div class="forgotPass">
+      <el-button @click="register()">Đăng kí</el-button>
       <el-button @click="forgotPass()">Quên mật khẩu?</el-button>
     </div>
     <button class="btn-login" @click="handleogin('ruleForm')">
       ĐĂNG NHẬP
     </button>
-    <div class="register">
-      <el-button @click="register()">Đăng kí</el-button>
-    </div>
   </div>
 </template>
 
@@ -88,7 +86,7 @@ export default {
       });
     },
     register() {
-      this.$router.push('/path/register')
+      this.$router.push('/register')
     }
   }
 }
@@ -105,7 +103,7 @@ export default {
     width: 100%;
     margin-bottom: 15px;
     img {
-      width: 200px;
+      width: 100px;
     }
   }
   .inputWrap {
@@ -146,7 +144,7 @@ export default {
   .btn-login {
     width: 100%;
     height: 50px;
-    background-color: #f4a7bb;
+    background-image: linear-gradient(to bottom right, #648455, #5a9e98);
     color: #ffffff;
     border: 0;
     border-radius: 4px;

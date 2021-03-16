@@ -3,10 +3,10 @@
     <div class="mainWrap">
       <div class="header">LẤY LẠI MẬT KHẨU</div>
       <div class="description">
-        Bạn vui lòng nhập email đăng nhập vào ô bên dưới để nhận email hướng dẫn lấy lại mật khẩu.
       </div>
       <div class="inputWrap" style="margin-bottom: 24px">
         <el-input placeholder="Email" v-model="email" type="email" @input="onChangeEmail($event)"></el-input>
+        <p>Nhập email cần lấy lại mật khẩu</p>
         <div v-if="emailError" class="error"><i class="el-icon-warning"></i> Email không được bỏ trống</div>
       </div>
       <button class="btn-submit" @click="submit()">GỬI EMAIL</button>
@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     back() {
-      this.$router.push('login')
+      this.$router.push('/')
     },
     submit() {
       if (this.email.length == '') {
@@ -78,9 +78,10 @@ export default {
     }
   }
   .btn-submit {
+    cursor: pointer;
     width: 100%;
     height: 50px;
-    background-color: #f4a7bb;
+    background-image: linear-gradient(to bottom right, #648455, #5a9e98);
     color: #ffffff;
     border: 0;
     border-radius: 4px;

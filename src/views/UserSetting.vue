@@ -8,7 +8,7 @@
     <div class="main-content">
       <div class="user-profile">
         <el-row>
-          <el-col :span="12">a</el-col>
+          <el-col :span="12" style="color:white">a</el-col>
           <el-col :span="12">
             <div class="loginWrap">
               <el-form :model="ruleForm" :label-position="label" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
@@ -25,7 +25,7 @@
                 <el-button @click="forgotPass()">Đổi mật khẩu</el-button>
               </div>
               <button class="btn-login" @click="register('ruleForm')">
-                CẬP NHẬT
+                CẬP NHẬT THÔNG TIN
               </button>
             </div>
           </el-col>
@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     forgotPass() {
-      this.$router.push('forgot-password')
+      this.$router.push('/forgot-password')
     },
     register(formName) {
       this.$refs[formName].validate((valid) => {
@@ -127,7 +127,7 @@ export default {
       margin: 7px;
       padding: 7px;
       float: left;
-      background: rgba(220 203 211 / 47%);
+      background-image: linear-gradient(to bottom right, #648455, #5a9e98);
       color: #ffffff;
       border-radius: 4px;
       cursor: pointer;
@@ -168,7 +168,7 @@ export default {
         .btn-login {
           width: 100%;
           height: 50px;
-          background-color: #f4a7bb;
+          background-image: linear-gradient(to bottom right, #648455, #5a9e98);
           color: #ffffff;
           border: 0;
           border-radius: 4px;

@@ -7,7 +7,7 @@
                @blur="cancelEditName"
                @keydown.enter="updateDirectoryName"
         >
-        <el-button class="list-more-action" size="mini" style="border: 0; background-color: #ebecf0">
+        <el-button class="list-more-action" size="mini" style="border: 0; background-color: #ebecf0; color:green">
           <i class="el-icon-close" @click="deleteList"></i>
         </el-button>
       </div>
@@ -152,7 +152,7 @@ export default {
   .listWrap {
     padding: 6px 8px;
     text-align: left;
-    background: #ebecf0;
+    background-image: linear-gradient(to bottom right, #648455, #5a9e98);
     border-radius: 4px;
     width: 272px;
     box-sizing: border-box;
@@ -169,11 +169,12 @@ export default {
       .list-name {
         width: 90%;
         height: 20px;
-        background: #ebecf0;
+        background:rgba(0,0,0,0);
         border: none;
         font-size: 14px;
         font-weight: bold;
-        color: #455167;
+        color: black;
+        outline: none;
       }
       .list-more-action {
         position: absolute;
@@ -187,14 +188,20 @@ export default {
       width: 100%;
       padding-left: 10px;
       text-align: left;
-      color: #5e6c84;
-      background-color: #ebecf0;
+      color: white;
+      font-weight: bold;
+      background-image: linear-gradient(to bottom right, #648455, #5a9e98);
       border-color: #ebecf0
     }
     .form-add-card {
       display: none;
       .el-input {
         margin-bottom: 7px;
+      }
+      i {
+        color: white;
+        cursor: pointer;
+        margin-left: 10px;
       }
     }
   }
