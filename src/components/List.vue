@@ -1,161 +1,201 @@
-<template> 
-<div class="main">     
-        <div class="card">
-          <h1>hello</h1>
-          <div class="list-card u-fancy-scrollbar" id="style-3">
-            <draggable v-model="myArray" ghost-class="ghost" @start="drag=true" @end="drag=false">
-            <transition-group>
-                <div class="sortable" v-for="element in myArray" :key="element.id" @click="centerDialogVisible = true">
-                    {{element.name}}
-                </div>
-               
-            </transition-group>
-            </draggable>           
-          </div>
-           <div class="add-card" slot="footer">
-                  <i class="el-icon-plus"></i>Thêm mới
-            </div>          
-        </div>
-
-        <div class="card">
-          <h1>hello2</h1>
-          <div class="list-card u-fancy-scrollbar" id="style-3">
-            <draggable v-model="myArray" ghost-class="ghost" @start="drag=true" @end="drag=false">
-            <transition-group>
-                <div class="sortable" v-for="element in myArray" :key="element.id">
-                    {{element.name}}
-                </div>
-               
-            </transition-group>
-            </draggable>           
-          </div>
-           <div class="add-card" slot="footer">
-                  <i class="el-icon-plus"></i>Thêm mới
-            </div>          
-        </div>
-
-        <!-- <el-button type="text" @click="centerDialogVisible = true">Click to open the Dialog</el-button> -->
-      <el-dialog
-        title="test dialog"
-        :visible.sync="centerDialogVisible"
-        :modalAppendToBody="false"
-        :custom-class="dialog-test"
-        width="768px">
-        <el-row>
-          <el-col :span="14">
-            <div class="right">
-              <div><i class="el-icon-share"></i>Mô tả</div>
-              <div>
-                <el-input
-                  type="textarea"
-                  :autosize="{ minRows: 2, maxRows: 4}"
-                  placeholder="Thêm mô tả chi tiết hơn..."
-                  v-model="textarea2">
-                </el-input>
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="10"><div class="left">hi</div></el-col>
-      </el-row>
-      </el-dialog>
-     
-</div>
- 
+<template>
+  <div>
+    <div class="listWrap" id="list2">
+      <div class="list-header">
+        <input type="text" class="list-name" v-model="directoryName" ref="directoryName"
+               @click="handleEditName"
+               @blur="cancelEditName"
+               @keydown.enter="updateDirectoryName"
+        >
+        <el-button class="list-more-action" size="mini" style="border: 0; background-color: #ebecf0">
+          <i class="el-icon-close" @click="deleteList"></i>
+        </el-button>
+      </div>
+      <Card class="card" v-for="(card, index) in directory.cards" :key="index" :cardId="card.id"/>
+      <div class="btn-add-card" ref="btnAddCard">
+        <el-button type="info" size="small" class="add-card" @click="addCard()">
+          <i class="el-icon-plus"></i>
+          Thêm thẻ mới
+        </el-button>
+      </div>
+      <div class="form-add-card" ref="formAddCard">
+        <el-input placeholder="Nhập tiêu đề cho thẻ này..." v-model="cardName"></el-input>
+        <el-button type="success" size="small" @click="storeCard">Thêm thẻ</el-button>
+        <i class="el-icon-close" @click="cancelAddCard()"></i>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script> 
-import draggable from 'vuedraggable'
+<script>
+import { mapState, mapMutations } from 'vuex'
+import api from '../api'
+import Card from "@/components/Card";
+
 export default {
+  props: ['directory'],
+  name: "Directory",
   components: {
-            draggable,
+    Card
+  },
+  computed: {
+    ...mapState('home', [
+
+    ]),
   },
   data () {
-      return {
-        myArray: [
-          { name: "1" , id: 0},
-          { name: "2" , id: 1},
-          { name: "3" , id: 2},
-          
-        ],
-        centerDialogVisible: false,
-      }
+    return {
+      directoryName: this.directory.title,
+      cardName: '',
+      newCard: [],
+      dialogVisible: false,
+      a: 'abc',
+      card: [],
+      carDescription: false,
+      labels: [],
+      labelName: '',
+      labelColor: '',
+      cards: [],
+      deadline: ''
+    }
   },
   methods: {
-    
+    ...mapMutations('home', [
+      'addNewCard', 'removeList'
+    ]),
+    handleEditName() {
+      this.$refs.directoryName.style.background = '#ffffff'
+    },
+    cancelEditName() {
+      this.$refs.directoryName.style.background = '#ebecf0'
+    },
+    updateDirectoryName() {
+      let data = {
+        title: this.directoryName
+      }
+      api.editDirectoryName(this.directory.id, data).then(() => {
+        this.$message({
+          message: 'cập nhật danh sách thành công!',
+          type: 'success'
+        });
+        this.reloadDirectories()
+        this.cancelEditName()
+      }).catch(() => {
+        this.$message({
+          message: 'cập nhật danh sách thành công!',
+          type: 'error'
+        });
+      })
+    },
+    addCard() {
+      this.$refs.btnAddCard.style.display = 'none'
+      this.$refs.formAddCard.style.display = 'block'
+    },
+    cancelAddCard() {
+      this.$refs.btnAddCard.style.display = 'block'
+      this.$refs.formAddCard.style.display = 'none'
+      this.cardName = ''
+    },
+    deleteList() {
+      this.$confirm('Bạn có chắc chắn muốn xóa không?', 'Cảnh báo', {
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy',
+        confirmButtonClass: 'btn-delete-list',
+        type: 'warning'
+      }).then(() => {
+        api.deleteDirectory(this.directory.id).then(() => {
+          this.$message({
+            message: 'Xóa danh sách thành công!',
+            type: 'success'
+          });
+          this.reloadDirectories()
+        }).catch(() => {
+          this.$message({
+            message: 'Xóa danh sách thất bại!',
+            type: 'error'
+          });
+        })
+      }).catch(() => {})
+    },
+    storeCard() {
+      let data = {
+        title: this.cardName,
+        index: this.directory.cards.length + 1,
+        directory_id: this.directory.id
+      }
+      api.createCard(data).then(() => {
+        this.$message({
+          message: 'Thêm thẻ thành công!',
+          type: 'success'
+        });
+        this.reloadDirectories()
+        this.cancelAddCard()
+      }).catch(() => {
+        this.$message({
+          message: 'Thêm thẻ không thành công!',
+          type: 'error'
+        });
+        this.cancelAddCard()
+      })
+    },
+    reloadDirectories() {
+      this.$emit('reloadDirectories')
+    }
+  },
+  mounted() {
+
   }
-  
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.main {
-  display: flex;
-  text-align: left;
-  line-height: 17px;
-  // height: 100%;
-  // overflow-x: scroll;
- 
-}
-.card {
-  background-color: #ebecf0;
-  width: 272px;
-  // height: 200px;
-  max-height: 100%;
-  // border: 1px solid black;
-  margin-left: 8px;
-  border-radius: 3px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-.title {
-  height: 51px;
-  border: 1px solid black  !important;
-}
-.body-card{
-  border: 1px solid blue;
-}
-.sortable{
-  background-color: white;
-  cursor: pointer;
-  margin: 0 4px;
-  padding: 0 4px;
-  margin-bottom: 10px;
-  border-radius: 3px;
-  height: 60px;
-  
-}
-.add-card {
-  background-color: #ebecf0;
-  cursor: pointer;
-  margin: 0 4px;
-  padding: 0 4px;
-  margin-bottom: 10px;
-  height: 42px;
-  color: #5e6c84 ;
-  font-size: 14px;
-  line-height: 52px;
-  font-weight: 400;
-  margin-left: 20px;
-}
-.main .sortable-drag {
-  opacity: 1;
-}
-.list-card {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  max-height: 100%;
-  height: 500px;
-}
-.u-fancy-scrollbar::-webkit-scrollbar {
-    height: 8px;
-    width: 8px;
-}
-.left{
-  text-align: center;
-}
-.dialog-test{
-  background-color: red;
-}
+  .listWrap {
+    padding: 6px 8px;
+    text-align: left;
+    background: #ebecf0;
+    border-radius: 4px;
+    width: 272px;
+    box-sizing: border-box;
+    color: #5e6c84;
+    float: left;
+    margin-right: 10px;
+    min-height: 80px;
+    .list-header {
+      position: relative;
+      font-size: 14px;
+      font-weight: bold;
+      height: 30px;
+      padding: 5px 20px 5px 5px;
+      .list-name {
+        width: 90%;
+        height: 20px;
+        background: #ebecf0;
+        border: none;
+        font-size: 14px;
+        font-weight: bold;
+        color: #455167;
+      }
+      .list-more-action {
+        position: absolute;
+        right: 0;
+        top: 4px;
+        padding: 4px;
+        cursor: pointer;
+      }
+    }
+    .add-card {
+      width: 100%;
+      padding-left: 10px;
+      text-align: left;
+      color: #5e6c84;
+      background-color: #ebecf0;
+      border-color: #ebecf0
+    }
+    .form-add-card {
+      display: none;
+      .el-input {
+        margin-bottom: 7px;
+      }
+    }
+  }
 </style>

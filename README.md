@@ -1,4 +1,4 @@
-# project-vuejs
+# project
 
 ## Project setup
 ```

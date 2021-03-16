@@ -1,117 +1,158 @@
 <template>
-  <div class="login">
-    <el-card>
-      <el-image
-        style="width: 51% !important; margin-bottom: 24px"
-        src="https://d2k1ftgv7pobq7.cloudfront.net/meta/c/p/res/images/trello-header-logos/167dc7b9900a5b241b15ba21f8037cf8/trello-logo-blue.svg"
-        fill>
-
-      </el-image>
-      <el-input
-            style="padding: 10px 0;"
-            placeholder="Name"
-            v-model="name">
-        </el-input>
-        <el-input
-            style="padding: 10px 0;"
-            placeholder="Email"
-            v-model="email">
-        </el-input>
-        <el-input
-            type="password"
-            style="padding: 10px 0;"
-            placeholder="Mật khẩu"
-            v-model="pw">
-        </el-input>
-        <el-input
-            type="password"
-            style="padding: 10px 0;"
-            placeholder="Nhập lại mật khẩu"
-            v-model="rpw">
-        </el-input>
-        <br><br>
-        <el-button type="primary" :plain="true" @click="signup" :target="target" style="color:white">ĐĂNG KÝ</el-button>
-    </el-card>
+  <div class="loginWrap">
+    <div class="logo">
+      <img src="../assets/images/blackpink.png" alt="">
+    </div>
+    <div class="title">Đăng kí tài khoản</div>
+    <el-form :model="ruleForm" :label-position="label" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+      <el-form-item prop="email">
+        <label style="float: left" ><span style="color: #f54b5e">*</span> Email</label>
+        <el-input v-model="ruleForm.email"></el-input>
+      </el-form-item>
+      <el-form-item prop="password">
+        <label style="float: left" ><span style="color: #f54b5e">*</span> Mật khẩu</label>
+        <el-input type="password" v-model="ruleForm.password"></el-input>
+      </el-form-item>
+      <el-form-item prop="checkPass">
+        <label style="float: left" ><span style="color: #f54b5e">*</span> Xác nhận mật khẩu</label>
+        <el-input type="password" v-model="ruleForm.checkPass"></el-input>
+      </el-form-item>
+      <el-form-item prop="gender">
+        <label style="float: left" >Giớ tính</label>
+        <el-radio-group v-model="ruleForm.gender">
+          <el-radio label="Nam"></el-radio>
+          <el-radio label="Nữ"></el-radio>
+          <el-radio label="Khác"></el-radio>
+        </el-radio-group>
+      </el-form-item>
+    </el-form>
+    <button class="btn-login" @click="register('ruleForm')">
+      ĐĂNG KÍ
+    </button>
+    <div class="register">
+      <el-button @click="login()">Đăng nhập</el-button>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-    name: "login",
-    data() {
-        return {
-            name: '',
-            email: '',
-            pw: '',
-            rpw: '',
-            target:'_blank'
-        }
-    },
-    methods: {
-        signup() {
-            if (this.name != '' && this.email != '' && this.pw != '' && this.rpw != '' && this.pw == this.rpw) {
-                if ( this.name.length <6 ) {
-                    this.$message.error('Tên không được nhỏ hơn 6 ký tự.');
-                    this.$router.replace({ name: "Register" });
-                }
-
-                else if ( this.email.length <6 ) {
-                    this.$message.error('Email không được nhỏ hơn 6 ký tự.');
-                    this.$router.replace({ name: "Register" });
-                }
-                
-                else if ( this.pw.length <6 ) {
-                    this.$message.error('PassWord không được nhỏ hơn 6 ký tự.');
-                    this.$router.replace({ name: "Register" });
-                }
-
-                else {
-                    this.$emit("authenticated", true);
-                    this.$router.replace({ name: "Main" });
-                } 
-            }
-            else if(this.name == ''){
-            this.$message.error('Tên không được trống.');
-            this.$router.replace({ name: "Register" });
-            }
-            else if(this.email == ''){
-              this.$message.error('Email không được trống.');
-              this.$router.replace({ name: "Register" });
-            }
-            else if(this.pw == ''){
-            this.$message.error('Mật khẩu không được trống.');
-            this.$router.replace({ name: "Register" });
-            }
-            else if(this.rpw == ''){
-            this.$message.error('Mật khẩu xác thực không được trống.');
-            this.$router.replace({ name: "Register" });
-            }
-            else if(this.rpw != this.pw){
-            this.$message.error('Mật khẩu xác thực trùng nhau.');
-            this.$router.replace({ name: "Register" });
-            }
-        },
-      
+  name: "LoginForm",
+  data() {
+    var confirm = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Yêu cầu xác nhận mật khẩu'));
+      } else if (value !== this.ruleForm.password) {
+        callback(new Error('Mật khẩu không chính xác!'));
+      } else {
+        callback();
+      }
+    };
+    return {
+      ruleForm: {
+        email: '',
+        password: '',
+        checkPass: '',
+        gender: '',
+      },
+      rules: {
+        email: [
+          { required: true, message: 'Email không được bỏ trống!', trigger: 'change' },
+          { type: 'email', message: 'Email không hợp lệ!', trigger: 'blur' },
+        ],
+        password: [
+          { required: true, message: 'Mật khẩu không được bỏ trống!', trigger: 'change' },
+          { min: 6, message: 'Mật khẩu không được ít hơn 6 kí tự', trigger: 'blur' },
+        ],
+        checkPass: [
+          { validator: confirm, trigger: 'blur' }
+        ],
+      },
+      label: 'top',
     }
+  },
+  methods: {
+    forgotPass() {
+      this.$router.push('forgot-password')
+    },
+    register(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$message({
+            message: 'Đăng kí thành công!',
+            type: 'success',
+          });
+          console.log(this.ruleForm)
+          this.$router.push('/home')
+        } else {
+          this.$message({
+            message: 'Đăng kí thất bại!',
+            type: 'error'
+          });
+          return false;
+        }
+      });
+    },
+    login() {
+      this.$router.push('/path/login')
+    }
+  }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.login {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 700px;
-    .el-card {
-        width: 29%;
-        box-shadow: rgba(19 17 17) 0 0 10px;
-    }
-}
-.el-button {
+.loginWrap {
+  width: 444px;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-sizing: border-box;
+  .logo {
     width: 100%;
-    background-color: #0080dd;
-    font-size: 14px;
-    line-height: 18px;
+    img {
+      width: 200px;
+    }
+  }
+  .title {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .inputWrap {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    .el-input {
+      height: 50px !important;
+    }
+    .error {
+      font-size: 12px;
+      color: #f54b5e;
+      float: left;
+    }
+  }
+  .register {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .el-button {
+      border: 0;
+      color: #0080dd;
+      padding: 7px;
+    }
+  }
+  .btn-login {
+    width: 100%;
+    height: 50px;
+    background-color: #f4a7bb;
+    color: #ffffff;
+    border: 0;
+    border-radius: 4px;
+    margin-top: 24px;
+    outline: none;
+    cursor: pointer;
+  }
 }
 </style>
