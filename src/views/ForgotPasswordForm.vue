@@ -5,44 +5,50 @@
       <div class="description">
       </div>
       <div class="inputWrap" style="margin-bottom: 24px">
-        <el-input placeholder="Email" v-model="email" type="email" @input="onChangeEmail($event)"></el-input>
+        <el-input placeholder="Mật khẩu" v-model="newpassword" type="password"></el-input>
+        <el-input placeholder="Nhập lại mật khẩu" v-model="repassword" type="password"></el-input>
         <p>Nhập email cần lấy lại mật khẩu</p>
-        <div v-if="emailError" class="error"><i class="el-icon-warning"></i> Email không được bỏ trống</div>
       </div>
-      <button class="btn-submit" @click="submit()">GỬI EMAIL</button>
-      <el-button @click="back()"><i class="el-icon-back"></i> Trở về trang đăng nhập</el-button>
+      <button type="submit" class="btn-submit" @click="submit()">Cập nhật mật khẩu</button>
+      <el-button @click="back()"><i class="el-icon-back"></i> Trở về trang chủ</el-button>
     </div>
   </div>
 </template>
 
 <script>
+import api from '../api'
 export default {
   name: "Register",
   data() {
     return {
-      email: '',
-      emailError: false
+      newpassword: '',
+      repassword:'',
     }
   },
   methods: {
     back() {
-      this.$router.push('/')
+      this.$router.push('/path/home')
     },
     submit() {
-      if (this.email.length == '') {
-        this.emailError = true
-      }
-      if (!this.emailError) {
+       if(this.newpassword !== this.repassword){
         this.$message({
-          message: 'Gửi email thành công!',
-          type: 'success'
+          message: 'Mật khẩu nhập lại không trùng!',
+          type: 'error'
         });
+      } else {
+        let data = {
+        password: this.newpassword,
+        password_confirmation: this.repassword
+        }
+          api.changePassWord(data).then(() => {
+          this.$message({
+            message: 'Thay đổi mật khẩu thành công!',
+            type: 'success',
+            data: data
+          });
+        })
       }
     },
-    onChangeEmail(email) {
-      this.email = email
-      this.emailError = false
-    }
   }
 }
 </script>

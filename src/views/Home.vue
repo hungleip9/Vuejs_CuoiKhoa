@@ -91,7 +91,6 @@ export default {
     getData() {
       api.getDirectories().then((response) => {
         this.directories = response.data.data
-        console.log(response.data.data)
       })
     },
   },

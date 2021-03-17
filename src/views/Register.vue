@@ -5,6 +5,10 @@
     </div>
     <div class="title">Đăng kí tài khoản</div>
     <el-form :model="ruleForm" :label-position="label" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+      <el-form-item prop="name">
+        <label style="float: left" ><span style="color: #f54b5e">*</span> Name</label>
+        <el-input type="text" v-model="ruleForm.name"></el-input>
+      </el-form-item>
       <el-form-item prop="email">
         <label style="float: left" ><span style="color: #f54b5e">*</span> Email</label>
         <el-input v-model="ruleForm.email"></el-input>
@@ -12,10 +16,6 @@
       <el-form-item prop="password">
         <label style="float: left" ><span style="color: #f54b5e">*</span> Mật khẩu</label>
         <el-input type="password" v-model="ruleForm.password"></el-input>
-      </el-form-item>
-      <el-form-item prop="checkPass">
-        <label style="float: left" ><span style="color: #f54b5e">*</span> Xác nhận mật khẩu</label>
-        <el-input type="password" v-model="ruleForm.checkPass"></el-input>
       </el-form-item>
     </el-form>
     <div class="register">
@@ -29,23 +29,15 @@
 </template>
 
 <script>
+import api from '../api'
 export default {
   name: "LoginForm",
   data() {
-    var confirm = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Yêu cầu xác nhận mật khẩu'));
-      } else if (value !== this.ruleForm.password) {
-        callback(new Error('Mật khẩu không chính xác!'));
-      } else {
-        callback();
-      }
-    };
     return {
       ruleForm: {
         email: '',
         password: '',
-        checkPass: '',
+        name: '',
       },
       rules: {
         email: [
@@ -56,26 +48,36 @@ export default {
           { required: true, message: 'Mật khẩu không được bỏ trống!', trigger: 'change' },
           { min: 6, message: 'Mật khẩu không được ít hơn 6 kí tự', trigger: 'blur' },
         ],
-        checkPass: [
-          { validator: confirm, trigger: 'blur' }
+        name: [
+          { required: true, message: 'Tên không được bỏ trống!', trigger: 'change' },
+          { min: 6, message: 'Tên không được ít hơn 6 kí tự', trigger: 'blur' },
         ],
       },
       label: 'top',
     }
   },
   methods: {
-    forgotPass() {
-      this.$router.push('forgot-password')
-    },
     register(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$message({
-            message: 'Đăng kí thành công!',
-            type: 'success',
-          });
-          console.log(this.ruleForm)
-          this.$router.push('/path/home')
+          // this.$message({
+          //   message: 'Đăng kí thành công!',
+          //   type: 'success',
+          // });
+          // console.log(this.ruleForm)
+          // this.$router.push('/path/home')
+          let data = {
+          name: this.ruleForm.name,
+          email: this.ruleForm.email,
+          password: this.ruleForm.password
+          }
+            api.register(data).then(() => {
+            this.$message({
+              message: 'Đăng kí thành công!',
+              type: 'success',
+              data: data
+            });
+          })
         } else {
           this.$message({
             message: 'Đăng kí thất bại!',

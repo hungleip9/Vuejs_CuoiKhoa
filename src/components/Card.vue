@@ -23,7 +23,7 @@
                   <div class="box-label-mini box-label-mini-red" ref="miniRed"></div>
                   <div class="box-label-mini box-label-mini-purple" ref="miniPurple"></div>
                   <div class="box-label-mini box-label-mini-blue" ref="miniBlue"></div>
-                  <div class="box-label-mini box-label-mini-plus" @click="openBoxLabel"><i class="el-icon-plus"></i></div>
+                  <!-- <div class="box-label-mini box-label-mini-plus" @click="openBoxLabel"><i class="el-icon-plus"></i></div> -->
                 </div>
                 <el-tag v-for="(label, index) in card.labels" :key="index"
                         :color="label.color"
@@ -41,16 +41,16 @@
             <el-col :span="22" style="padding-right: 18px" id="description">
               <div class="card-info-title">
                 Mô tả
-                <el-button size="small" style="padding: 5px 10px; margin-left: 5px" @click="openEditCardDescription" plain>Chỉnh sửa</el-button>
               </div>
-              <div v-if="carDescription" class="card-description">
+              <!-- <div v-if="!carDescription" class="card-description">
+                {{ card.description }}
+              </div> -->
+              <div v-if="carDescription" class="add-card-description" ref="cardDescriptionBtn" @click="openEditCardDescription">
                 {{ card.description }}
               </div>
-              <div v-else class="add-card-description" ref="cardDescriptionBtn" @click="openEditCardDescription">
-                Thêm mổ tả chi tiết...
-              </div>
               <textarea ref="cardDescription" v-model="carDescription" class="add-card-description-textarea"
-                        @blur="updateCardDescription"></textarea>
+                  @blur="updateCardDescription">
+              </textarea>
             </el-col>
           </el-row>
           <el-row style="" class="card-info" v-for="(checkList, index) in card.check_lists" :key="index">
@@ -58,21 +58,27 @@
               <i class="el-icon-s-claim"> </i>
             </el-col>
             <el-col :span="22" style="padding-right: 18px">
-              <div class="card-info-title">
+
+              <div class="card-info-title" ref="CheckListTitle" @click="openEditCheckListTitle(index)">
                 {{checkList.title}}
-                <el-button size="small" style="padding: 5px 10px; margin-left: 5px; float: right" @click="handleDeleteCheckList(checkList.id)" plain>Xóa</el-button>
+                <el-button size="small" class="btn-delete-check-list" style="padding: 5px 10px; margin-left: 5px; float: right" @click="handleDeleteCheckList(checkList.id)" plain>Xóa</el-button>
               </div>
+
+              <textarea ref="editCheckListTitle" v-model="checkList.title" class="" style="display:none" @blur="updateCheckListTitle(index,checkList.id,checkList.title)">
+              </textarea>
+
               <el-progress :percentage="0" style="margin-bottom: 15px"></el-progress>
               <div class="check-list-childs" v-for="(child, index) in checkList.check_list_childs" :key="index">
                 <el-checkbox v-if="child.status == 1" v-model="child.status" checked @change="changeStatusCheckListChild(child.id, child.status)">{{child.title}}</el-checkbox>
                 <el-checkbox v-else v-model="child.status" @change="changeStatusCheckListChild(child.id, child.status)">{{child.title}}</el-checkbox>
+                <el-button size="small" class="btn-delete-check-list" style="padding: 5px 10px; margin-left: 5px; margin-left:50px;" ref="refDeleteCheckListChild" @click="handleDeleteCheckListChild(child.id)" plain>Xóa</el-button>
               </div>
               <input v-if="addSubCheckList" type="text" class="input-sub-check-list" placeholder="Thêm một mục" ref="inputSubCheckList" v-model="subCheckListName">
               <div v-if="addSubCheckList" ref="btnSubCheckList">
                 <el-button size="small" @click="closeAddSubCheckList">Hủy</el-button>
                 <el-button type="success" size="small" @click="handleCreateSubCheckList(checkList.id)">Thêm</el-button>
               </div>
-              <div v-if="!addSubCheckList" class="card-action-btn" ref="btnAddSubCheckList" style="width: 110px" @click="openAddSubCheckList">
+              <div v-if="!addSubCheckList" class="card-action-btn" ref="btnAddSubCheckList" style="width: 110px;background-image: linear-gradient(to bottom right, #648455, #5a9e98)!important; color:white" @click="openAddSubCheckList">
                 Thêm một mục
               </div>
             </el-col>
@@ -111,7 +117,7 @@
                 <!-- <el-button class="btn-save-label" type="success" size="small" @click="addLabel">Tạo mới</el-button> -->
               </div>
             </div>
-            <div class="card-action-btn" slot="reference">
+            <div class="card-action-btn" style="background-image: linear-gradient(to bottom right, #648455, #5a9e98)!important; color:white" slot="reference">
               <i class="el-icon-collection-tag" style="margin-right: 7px"> </i>
               Nhãn
             </div>
@@ -131,12 +137,12 @@
                 <el-button class="btn-save-label" type="success" size="small" @click="addCheckList">Thêm</el-button>
               </div>
             </div>
-            <div class="card-action-btn" slot="reference">
+            <div class="card-action-btn" style="background-image: linear-gradient(to bottom right, #648455, #5a9e98)!important;color:white" slot="reference">
               <i class="el-icon-s-claim" style="margin-right: 7px"> </i>
               Việc cần làm
             </div>
           </el-popover>
-          <div class="card-action-btn">
+          <div class="card-action-btn" style="background-image: linear-gradient(to bottom right, #648455, #5a9e98)!important;color:white">
             <i class="el-icon-time" style="margin-right: 7px"> </i>
             <el-date-picker
                 v-model="deadline"
@@ -162,13 +168,14 @@
             </el-tag>
           </div>
           <div class="card-name">
+              <div class="label-color" ref="miniGreen"></div>
             {{card.title}}
           </div>
         </div>
       </div>
     </draggable>
   </div>
-</template>
+</template>``
 
 <script>
 import api from "@/api";
@@ -194,6 +201,7 @@ name: "Card",
       card: [],
       checkListName: '',
       subCheckListName: '',
+      checkListTitle: '',
       addSubCheckList: false,
     }
   },
@@ -282,10 +290,25 @@ name: "Card",
       })
     },
     openEditCardDescription() {
-      if (!this.carDescription) {
-        this.$refs.cardDescriptionBtn.style.display = 'none'
-      }
+      this.$refs.cardDescriptionBtn.style.display = 'none'
       this.$refs.cardDescription.style.display = 'block'
+    },
+    openEditCheckListTitle(index){
+      this.$refs.CheckListTitle[index].style.display = 'none'
+      this.$refs.editCheckListTitle[index].style.display = 'block'
+    },
+    updateCheckListTitle(index,id,title){
+      let data = {
+        title: title
+      }
+      this.$refs.CheckListTitle[index].style.display = 'block'
+      this.$refs.editCheckListTitle[index].style.display = 'none'
+      api.updateCheckList(id, data).then(() => {
+        this.$message({
+          message: 'Thành công!',
+          type: 'success'
+        });
+      })
     },
     updateCardDescription() {
       let data = {
@@ -296,8 +319,11 @@ name: "Card",
           message: 'Thành công!',
           type: 'success'
         });
+        this.$refs.cardDescription.style.display = 'none'
+        this.$refs.cardDescriptionBtn.style.display = 'block'
         this.getDetailCard()
       })
+      
     },
     selectlabelColor(color) {
       this.$refs.inputLabel.style.background = color
@@ -332,9 +358,46 @@ name: "Card",
       })
     },
     handleDeleteCheckList(id) {
-      api.deleteCheckList(id).then(() => {
-        this.getDetailCard()
-      })
+      this.$confirm('Bạn có chắc chắn muốn xóa không?', 'Cảnh báo', {
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy',
+        confirmButtonClass: 'btn-delete-list',
+        type: 'warning'
+      }).then(() => {
+        api.deleteCheckList(id).then(() => {
+          this.$message({
+            message: 'Xóa danh sách thành công!',
+            type: 'success'
+          });
+          this.getDetailCard()
+        }).catch(() => {
+          this.$message({
+            message: 'Xóa danh sách thất bại!',
+            type: 'error'
+          });
+        })
+      }).catch(() => {})
+    },
+    handleDeleteCheckListChild(id) {
+      this.$confirm('Bạn có chắc chắn muốn xóa không?', 'Cảnh báo', {
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy',
+        confirmButtonClass: 'btn-delete-list',
+        type: 'warning'
+      }).then(() => {
+        api.deleteCheckListChild(id).then(() => {
+          this.$message({
+            message: 'Xóa danh sách thành công!',
+            type: 'success'
+          });
+          this.getDetailCard()
+        }).catch(() => {
+          this.$message({
+            message: 'Xóa danh sách thất bại!',
+            type: 'error'
+          });
+        })
+      }).catch(() => {})
     },
     openAddSubCheckList() {
       this.addSubCheckList = true
@@ -359,12 +422,16 @@ name: "Card",
     changeStatusCheckListChild(id, status) {
       if (status) {
         status = 1
+        
       } else {
         status = 0
+    
       }
       api.updateStatusCheckListChild(id, status).then((response) => {
+        
         console.log(response)
       })
+      // this.$refs.refDeleteCheckListChild.style.display = 'block'
     },
     getDetailCard() {
       api.detailCard(this.cardId).then((response) => {
@@ -408,6 +475,11 @@ name: "Card",
   }
   .card-info {
     margin-top: 20px;
+    .btn-delete-check-list{
+      background-color: #eb5a46;
+      color: white;
+      font-weight: bold;
+    }
     .card-info-title {
       font-size: 16px;
       font-weight: 600;
@@ -469,6 +541,8 @@ name: "Card",
         box-sizing: border-box;
         padding-left: 10px;
         border-radius: 5px;
+        outline: none;
+        border: 1px solid gray;
       }
       .labels-color {
         width: 55px;
@@ -531,7 +605,16 @@ name: "Card",
           width: 100%;
           display: flex;
           align-items: center;
-          height: 32px
+          height: 32px;
+            .label-color{
+              width: 40px;
+              height: 8px;
+              background: red;
+              border-radius: 5px;
+              position: absolute;
+              top: 0px;
+              margin-right: 10px;
+            }
         }
       }
       .card-content:hover {
@@ -661,5 +744,9 @@ name: "Card",
         .box-label-mini-plus:hover {
           background-color: #dee0e2;
         }
+        .card-action-btn{
+           
+        }
+       
     }
 </style>

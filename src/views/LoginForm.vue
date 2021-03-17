@@ -15,7 +15,6 @@
     </el-form>
     <div class="forgotPass">
       <el-button @click="register()">Đăng kí</el-button>
-      <el-button @click="forgotPass()">Quên mật khẩu?</el-button>
     </div>
     <button class="btn-login" @click="handleogin('ruleForm')">
       ĐĂNG NHẬP

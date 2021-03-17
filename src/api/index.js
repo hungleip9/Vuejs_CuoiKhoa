@@ -125,6 +125,13 @@ export default {
             data: data
         })
     },
+    updateCheckList(id,data) {
+        return apiAxios({
+            method: 'put',
+            url: '/check-lists/' + id,
+            data: data
+        })
+    },
     createSubCheckList(data) {
         return apiAxios({
             method: 'post',
@@ -152,4 +159,17 @@ export default {
             data: data
         })
     },
+    deleteCheckListChild(id) {
+        return apiAxios({
+            method: 'delete',
+            url: '/check-list-childs/' + id,
+        })
+    },
+    changePassWord(data) {
+        return apiAxios({
+            method: 'put',
+            url: '/users/password',
+            data: data
+        })
+    }
 }

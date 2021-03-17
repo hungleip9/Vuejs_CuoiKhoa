@@ -80,6 +80,7 @@ export default {
         });
         this.reloadDirectories()
         this.cancelEditName()
+        this.$refs.directoryName.style.background = 'rgba(0,0,0,0)'
       }).catch(() => {
         this.$message({
           message: 'cập nhật danh sách thành công!',

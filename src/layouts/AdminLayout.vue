@@ -3,7 +3,7 @@
     <div class="container">
       <div class="header">
         <div class="logo" @click="goToHome()">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png" alt="">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png" alt="" @click="logo">
         </div>
         <div class="avatar" @click="openSetting()">
           <el-avatar>
@@ -19,9 +19,9 @@
               <img src="https://lh3.googleusercontent.com/-5fAshoFGq7M/W9NftV8GiKI/AAAAAAAACI4/VJ60JbnPmnkwZ4sEcXTKDdN2ZUBO1OUPQCEwYBhgLKtQDAL1OcqxI_mvzWIoyAusUEkm31QGcE8Oe1RdBSL2Z-5t-snh4qTqTv_opU4LzVsQU-njwndsOmNlVyIsRulMIFK3xUHUWJlkDobuY6UT0LeAt0F32pvynWd09l6LF1Rz6tF6dlMrTgQbNwqjwS9ZZxancdYJHWLX6Gy-2MN5KNsk0cO2cQe1sV1wUgkpKMh2qQE7zpRlll2SUXROlcNXpA1LunW3rRVxvYVlWh3EvHtiovDqmJR3PRmubWw29BWyCA2_AXuzk7IMZamCT8YV_bneTsj54Vsn4rjQajtyF75KL5XgSv_RPfbtZHS09Ed5gqS1TEiOhsXyfKEXKXoLcNFNS1WwGauWTKA1AMIk3BTV8axtAsZq2AQKYwO58Y4vLFAypHHbkTAPbctF-5YdMhEwN9GphKLppx0zo17V0f-MAuotxBPbxn0osczz-6lmSOyaygieZbTzcov6AGdfR_q6CYF0HtfAHt_u0ezTHYSUjtnpZRhNnHMuAhU2qwrUFv3aYuBBE72Y3IZRweyWeLI__D8w54bI0tJ5Vk1kIaw4A-Jo5oXhLLCyRVieEsrRlCSgfp5RpWFYF4ldm2PlfUyq_8-ERPfH5gCXElmeGLo36K1-oMOvNvYIG/w140-h140-p/97ac7c16-6fdb-4d44-abc8-d37d219bd229" alt="">
             </el-avatar>
             <div class="name-mail">
-              <div class="name">Lê Quang Hùng</div>
+              <div class="name">{{info.name}}</div>
               <br>
-              <span class="email">hungleip9@gmail.com</span>
+              <span class="email">{{info.email}}</span>
             </div>
           </div>
           
@@ -40,9 +40,15 @@
 
 <script>
 import {mapMutations, mapState} from "vuex";
+import api from '../api'
 
 export default {
   name: "AdminLayout",
+  data () {
+    return {
+      info: [],
+    }
+  },
   computed: {
     ...mapState('auth', ['isAuthenticated']),
   },
@@ -54,7 +60,7 @@ export default {
       else this.$refs.usersetting.style.visibility = 'visible'
     },
     openProfile() {
-      this.$router.push('/path/profile')
+      this.$router.replace({ name: "Profile" });
     },
     goToHome() {
       this.$router.push('home')
@@ -66,8 +72,19 @@ export default {
       if (this.$router.currentRoute.name !== 'Login') {
         this.$router.push({ name: 'Login' })
       }
-    }
-  }
+    },
+    logo() {
+      this.$router.replace({ name: "Home" });
+    },
+    getUser() {
+      api.getAuthUser().then((response) => {
+        this.info = response.data
+      })
+    },
+  },
+  mounted() {
+    this.getUser()
+  },
 }
 </script>
 
