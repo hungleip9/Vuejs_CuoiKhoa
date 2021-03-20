@@ -118,6 +118,12 @@ export default {
             data: data
         })
     },
+    deleteLabel(id) {
+        return apiAxios({
+            method: 'delete',
+            url: '/labels/' + id,
+        })
+    },
     createChecklist(data) {
         return apiAxios({
             method: 'post',

@@ -15,21 +15,13 @@
             <el-col :span="2" style="color:white">a</el-col>
             <el-col :span="22">
               <div v-if="card.labels" class="">
-                <div>Nhãn</div>
-                <div class="list-box-label-mini">
-                  <div class="box-label-mini box-label-mini-green" ref="miniGreen"></div>
-                  <div class="box-label-mini box-label-mini-orange" ref="miniOrange"></div>
-                  <div class="box-label-mini box-label-mini-yellow" ref="miniYellow"></div>
-                  <div class="box-label-mini box-label-mini-red" ref="miniRed"></div>
-                  <div class="box-label-mini box-label-mini-purple" ref="miniPurple"></div>
-                  <div class="box-label-mini box-label-mini-blue" ref="miniBlue"></div>
-                  <!-- <div class="box-label-mini box-label-mini-plus" @click="openBoxLabel"><i class="el-icon-plus"></i></div> -->
-                </div>
+                <div>Nhãn</div><br>
                 <el-tag v-for="(label, index) in card.labels" :key="index"
                         :color="label.color"
                         effect="dark"
                         style="margin-right: 5px; border: 0">
                   {{label.name}}
+                  <i class="el-icon-circle-close icon-delete-label" @click="deleteLabel(label.id)"></i>
                 </el-tag>
               </div>
             </el-col>
@@ -42,10 +34,7 @@
               <div class="card-info-title">
                 Mô tả
               </div>
-              <!-- <div v-if="!carDescription" class="card-description">
-                {{ card.description }}
-              </div> -->
-              <div v-if="carDescription" class="add-card-description" ref="cardDescriptionBtn" @click="openEditCardDescription">
+              <div class="add-card-description" ref="cardDescriptionBtn" @click="openEditCardDescription">
                 {{ card.description }}
               </div>
               <textarea ref="cardDescription" v-model="carDescription" class="add-card-description-textarea"
@@ -96,22 +85,22 @@
               </div>
               <div class="form-add-labels">
                 <p style="margin: 0 0 5px 0">Nhãn</p>
-                <div class="box-color-label green" @click="green">
+                <div class="box-color-label green" @click="green(card.id)">
                  <i class="el-icon-check" ref="iconCheckGreen"></i>
                </div>
-               <div class="box-color-label yellow" @click="yellow">
+               <div class="box-color-label yellow" @click="yellow(card.id)">
                  <i class="el-icon-check" ref="iconCheckYellow"></i>
                </div>
-               <div class="box-color-label orange" @click="orange">
+               <div class="box-color-label orange" @click="orange(card.id)">
                  <i class="el-icon-check" ref="iconCheckOrange"></i>
                </div>
-               <div class="box-color-label red" @click="red">
+               <div class="box-color-label red" @click="red(card.id)">
                  <i class="el-icon-check" ref="iconCheckRed"></i>
                </div>
-               <div class="box-color-label purple" @click="purple">
+               <div class="box-color-label purple" @click="purple(card.id)">
                  <i class="el-icon-check" ref="iconCheckPurple"></i>
                </div>
-               <div class="box-color-label blue" @click="blue">
+               <div class="box-color-label blue" @click="blue(card.id)">
                  <i class="el-icon-check" ref="iconCheckBlue"></i>
                </div>
                 <!-- <el-button class="btn-save-label" type="success" size="small" @click="addLabel">Tạo mới</el-button> -->
@@ -168,7 +157,6 @@
             </el-tag>
           </div>
           <div class="card-name">
-              <div class="label-color" ref="miniGreen"></div>
             {{card.title}}
           </div>
         </div>
@@ -206,71 +194,129 @@ name: "Card",
     }
   },
   methods: {
-    green(){
-      let css =this.$refs.miniGreen.style.display
-      let mini = this.$refs.iconCheckGreen.style.display
-      if(css == 'inline-block' && mini == 'inline-block'){
-          this.$refs.miniGreen.style.display = 'none';
+    green(id){
+      let css = this.$refs.iconCheckGreen.style.display
+      if(css == 'inline-block'){
           this.$refs.iconCheckGreen.style.display = 'none';
       }else{
-          this.$refs.miniGreen.style.display = 'inline-block';
           this.$refs.iconCheckGreen.style.display = 'inline-block';
+          let data = {
+          name: 'green',
+          color: '#61bd4f'
+          }
+          api.createLabel(id, data).then(() => {
+            this.$message({
+              message: 'Thêm nhãn thành công!',
+              type: 'success'
+            });
+            this.getDetailCard()
+          })
       }
     },
-    yellow(){
-      let mini =this.$refs.miniYellow.style.display
+    yellow(id){
       let css =this.$refs.iconCheckYellow.style.display
-      if(css == 'inline-block' && mini == 'inline-block'){
-          this.$refs.miniYellow.style.display = 'none';
+      if(css == 'inline-block'){
           this.$refs.iconCheckYellow.style.display = 'none';
       }else{
-          this.$refs.miniYellow.style.display = 'inline-block';
           this.$refs.iconCheckYellow.style.display = 'inline-block';
+          let data = {
+          name: 'yellow',
+          color: '#f2d600'
+          }
+          api.createLabel(id, data).then(() => {
+            this.$message({
+              message: 'Thêm nhãn thành công!',
+              type: 'success'
+            });
+            this.getDetailCard()
+          })
       }
     },
-    orange(){
-      let mini =this.$refs.miniOrange.style.display
+    orange(id){
       let css =this.$refs.iconCheckOrange.style.display
-      if(css == 'inline-block' && mini == 'inline-block'){
-        this.$refs.miniOrange.style.display = 'none';
+      if(css == 'inline-block'){
           this.$refs.iconCheckOrange.style.display = 'none';
       }else{
-        this.$refs.miniOrange.style.display = 'inline-block';
           this.$refs.iconCheckOrange.style.display = 'inline-block';
+          let data = {
+          name: 'orange',
+          color: '#ff9f1a'
+          }
+          api.createLabel(id, data).then(() => {
+            this.$message({
+              message: 'Thêm nhãn thành công!',
+              type: 'success'
+            });
+            this.getDetailCard()
+          })
       }
     },
-    red(){
-      let mini =this.$refs.miniRed.style.display
+    red(id){
       let css =this.$refs.iconCheckRed.style.display
-      if(css == 'inline-block' && mini == 'inline-block'){
-        this.$refs.miniRed.style.display = 'none';
+      if(css == 'inline-block'){
           this.$refs.iconCheckRed.style.display = 'none';
       }else{
-        this.$refs.miniRed.style.display = 'inline-block';
           this.$refs.iconCheckRed.style.display = 'inline-block';
+          let data = {
+          name: 'red',
+          color: '#eb5a46'
+          }
+          api.createLabel(id, data).then(() => {
+            this.$message({
+              message: 'Thêm nhãn thành công!',
+              type: 'success'
+            });
+            this.getDetailCard()
+          })
       }
     },
-    purple(){
-      let mini =this.$refs.miniPurple.style.display
+    purple(id){
       let css =this.$refs.iconCheckPurple.style.display
-      if(css == 'inline-block' && mini == 'inline-block'){
-        this.$refs.miniPurple.style.display = 'none';
+      if(css == 'inline-block'){
           this.$refs.iconCheckPurple.style.display = 'none';
       }else{
-        this.$refs.miniPurple.style.display = 'inline-block';
           this.$refs.iconCheckPurple.style.display = 'inline-block';
+          let data = {
+          name: 'purple',
+          color: '#c377e0'
+          }
+          api.createLabel(id, data).then(() => {
+            this.$message({
+              message: 'Thêm nhãn thành công!',
+              type: 'success'
+            });
+            this.getDetailCard()
+          })
       }
     },
-    blue(){
-      let mini =this.$refs.miniBlue.style.display
+    blue(id){
       let css =this.$refs.iconCheckBlue.style.display
-      if(css == 'inline-block' && mini == 'inline-block'){
-        this.$refs.miniBlue.style.display = 'none';
+      if(css == 'inline-block'){
           this.$refs.iconCheckBlue.style.display = 'none';
       }else{
-        this.$refs.miniBlue.style.display = 'inline-block';
           this.$refs.iconCheckBlue.style.display = 'inline-block';
+          let data = {
+          name: 'blue',
+          color: '#0079bf'
+          }
+          api.createLabel(id, data).then(() => {
+            this.$message({
+              message: 'Thêm nhãn thành công!',
+              type: 'success'
+            });
+            this.getDetailCard()
+          })
       }
+    },
+    deleteLabel(id){
+      // this.$refs.iconCheckBlue.style.display = 'inline-block';
+      api.deleteLabel(id).then(() => {
+            this.$message({
+              message: 'Xoá nhãn thành công!',
+              type: 'success'
+            });
+            this.getDetailCard()
+          })
     },
     openDetailCard() {
       this.dialogVisible = true
@@ -282,7 +328,7 @@ name: "Card",
       let data = {
         title: this.card.title
       }
-      api.editCard(this.card.id, data).then(() => {
+      api.editCard(this.card.id,data).then(() => {
         this.$message({
           message: 'Thành công!',
           type: 'success'
@@ -330,23 +376,6 @@ name: "Card",
       this.$refs.inputLabel.style.color = '#ffffff'
       this.$refs.inputLabel.style.border = '#ffffff'
       this.labelColor = color
-    },
-    addLabel() {
-      if (this.labelName && this.labelColor) {
-        let data = {
-          name: this.labelName,
-          color: this.labelColor
-        }
-        api.createLabel(this.card.id, data).then((response) => {
-          console.log(response)
-          this.labelName = ''
-          this.labelColor = ''
-          this.$refs.inputLabel.style.background = '#ffffff'
-          this.$refs.inputLabel.style.color = '#000000'
-          this.getDetailCard()
-          this.dialogVisible = true
-        })
-      }
     },
     addCheckList() {
       let data = {
@@ -587,7 +616,7 @@ name: "Card",
       cursor: pointer;
       position: relative;
       .card-content {
-        min-height: 32px;
+        min-height: 45px;
         height: auto;
         background-color: #ffffff;
         padding: 0 0 0 10px;
@@ -611,8 +640,6 @@ name: "Card",
               height: 8px;
               background: red;
               border-radius: 5px;
-              position: absolute;
-              top: 0px;
               margin-right: 10px;
             }
         }
@@ -744,9 +771,23 @@ name: "Card",
         .box-label-mini-plus:hover {
           background-color: #dee0e2;
         }
-        .card-action-btn{
-           
-        }
-       
     }
+    .el-tag{
+      margin-left: 8px;
+      position: relative;
+      .icon-delete-label {
+          font-size: 17px;
+          position: absolute;
+          color: #606266;
+          top: -5px;
+          font-weight: bold;
+          cursor: pointer;
+          display: none;
+        }
+    }
+    .el-tag:hover i{
+      display: block;
+      right: -5px;
+    }
+    
 </style>
