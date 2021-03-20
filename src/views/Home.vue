@@ -6,24 +6,28 @@
       </div>
     </div>
     <div class="main-content">
-      <draggable
-          class="drag-wrap"
-        :list="directories"
-          group="directories"
-      >
-        <List class="directory" v-for="(directory, index) in directories" :key="index"
-              :directory="directory"
-              @reloadDirectories="getData"
-        />
-      </draggable>
-      <div class="listWrap" ref="addListBtn" @click="createListForm()">
-        <i class="el-icon-plus"></i>
-        Thêm danh sách khác
-      </div>
-      <div class="listWrap" id="addWrap" ref="addListWrap">
-        <el-input placeholder="Nhập tiêu đề danh sách..." v-model="directoryName"></el-input>
-        <el-button type="success" class="add-list" @click="createList">Thêm danh sách</el-button>
-        <i class="el-icon-close close-add-list" @click="cancelCreateList()"></i>
+      <div class="content">
+        <draggable
+            class="drag-wrap"
+            :list="directories"
+            group="directories"
+            :move="moveDirectory"
+        >
+          <List class="directory" v-for="(directory, index) in directories" :key="index"
+                :directory="directory"
+                @reloadDirectories="getData"
+          />
+        
+        <div class="listWrap" ref="addListBtn" @click="createListForm()">
+          <i class="el-icon-plus"></i>
+          Thêm danh sách khác
+        </div>
+        <div class="listWrap formListWrap" id="addWrap" ref="addListWrap">
+          <el-input placeholder="Nhập tiêu đề danh sách..." v-model="directoryName"></el-input>
+          <el-button type="success" class="add-list" @click="createList">Thêm danh sách</el-button>
+          <i class="el-icon-close close-add-list" @click="cancelCreateList()"></i>
+        </div>
+        </draggable>
       </div>
     </div>
   </div>
@@ -59,6 +63,13 @@ export default {
     ...mapMutations('home', [
        'addList'
     ]),
+    moveDirectory(e) {
+      let id = e.draggedContext.element.id
+      let data = {
+        index: e.draggedContext.futureIndex
+      }
+      api.changeIndexDirectory(id, data)
+    },
     createListForm() {
       this.$refs.addListBtn.style.display = 'none'
       this.$refs.addListWrap.style.display = 'block'
@@ -129,7 +140,6 @@ export default {
         }
       }
       .listWrap {
-        margin-top: 10px;
         padding: 10px 8px;
         text-align: left;
         background-image: linear-gradient(to bottom right, #648455, #5a9e98);
@@ -140,7 +150,11 @@ export default {
         float: left;
         margin-right: 15px;
         cursor: pointer;
+        height: 53px;
         //display: inline-block;
+      }
+      .formListWrap {
+        height: 86px!important;
       }
       #addWrap {
         background: #ffffff !important;

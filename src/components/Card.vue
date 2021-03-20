@@ -41,7 +41,58 @@
                   @blur="updateCardDescription">
               </textarea>
             </el-col>
+            <!-- them ngay het han -->
+            <el-col :span="22" style="padding-right: 18px" id="description">
+              <div class="card-info-title">
+                Ngày hết hạn
+              </div>
+              <div class="button-right" >
+                <el-checkbox v-if="card.status === 3" checked @change="changeStatusCard(card.id)">
+                  <div class="block">
+                    <el-date-picker
+                      v-model="card.deadline"
+                      type="datetime" style="width: 299px;"
+                      >
+                    </el-date-picker>
+                    <div class="inline" ref="statusDeadline" v-if="card.status === 1 " style="color: #fff;background-color: #ec9488;">QUÁ HẠN</div>
+                    <div class="inline" ref="statusDeadline" v-if="card.status === 2 " >GẦN HẾT HẠN</div>
+                    <div class="inline" ref="statusDeadline" v-if="card.status === 3 " style="color: #fff;background-color: #61bd4f;">HOÀN TẤT</div>
+                  </div>
+                </el-checkbox>
+                <el-checkbox v-else @change="changeStatusCard(card.id)">
+                  <div class="block">
+                    <el-date-picker
+                      v-model="card.deadline"
+                      type="datetime" style="width: 299px;"
+                      >
+                    </el-date-picker>
+                    <div class="inline" ref="statusDeadline" v-if="card.status === 1 " style="color: #fff;background-color: #ec9488;">QUÁ HẠN</div>
+                    <div class="inline" ref="statusDeadline" v-if="card.status === 2 " >GẦN HẾT HẠN</div>
+                    <div class="inline" ref="statusDeadline" v-if="card.status === 3 " style="color: #fff;background-color: #61bd4f;">HOÀN TẤT</div>
+                  </div>
+                </el-checkbox>
+              </div>
+            </el-col>
+
           </el-row>
+        <!-- giao dien upload file -->
+          <el-row style="" class="card-info">
+            <el-col :span="2" style="font-size: 20px">
+              <i class="el-icon-paperclip"></i>
+            </el-col>
+            <el-col :span="22" style="padding-right: 18px" id="description">
+              <div class="card-info-title">
+                Các tập tin đính kèm
+              </div>
+              <div style="margin-top:10px" class="" ref="cardFile" @click="openEditCardDescription" v-for="(file, index) in card.files" :key="index">
+                <i class="el-icon-delete delete-file-card" @click="deleteFileCard(file.id)"></i> <b @click="showEditFileCard(index)" ref="fileNameCard">{{ file.name }}</b>
+                <textarea ref="editFileCard" v-model="file.name" class="text-area-file-card" style="display:none" @blur="updateFileCard(file.id, file.name, index)">
+              </textarea>
+              </div>
+              
+            </el-col>
+          </el-row>
+
           <el-row style="" class="card-info" v-for="(checkList, index) in card.check_lists" :key="index">
             <el-col :span="2" style="font-size: 20px">
               <i class="el-icon-s-claim"> </i>
@@ -60,7 +111,7 @@
               <div class="check-list-childs" v-for="(child, index) in checkList.check_list_childs" :key="index">
                 <el-checkbox v-if="child.status == 1" v-model="child.status" checked @change="changeStatusCheckListChild(child.id, child.status)">{{child.title}}</el-checkbox>
                 <el-checkbox v-else v-model="child.status" @change="changeStatusCheckListChild(child.id, child.status)">{{child.title}}</el-checkbox>
-                <el-button size="small" class="btn-delete-check-list" style="padding: 5px 10px; margin-left: 5px; margin-left:50px;" ref="refDeleteCheckListChild" @click="handleDeleteCheckListChild(child.id)" plain>Xóa</el-button>
+                <el-button size="small" style="padding: 5px 10px; margin-left: 5px; margin-left:50px;float:right" ref="refDeleteCheckListChild" @click="handleDeleteCheckListChild(child.id)" plain><i class="el-icon-delete"></i></el-button>
               </div>
               <input v-if="addSubCheckList" type="text" class="input-sub-check-list" placeholder="Thêm một mục" ref="inputSubCheckList" v-model="subCheckListName">
               <div v-if="addSubCheckList" ref="btnSubCheckList">
@@ -131,20 +182,40 @@
               Việc cần làm
             </div>
           </el-popover>
-          <div class="card-action-btn" style="background-image: linear-gradient(to bottom right, #648455, #5a9e98)!important;color:white">
-            <i class="el-icon-time" style="margin-right: 7px"> </i>
-            <el-date-picker
-                v-model="deadline"
-                type="datetime"
-                default-time="12:00:00"
-                size="mini">
-            </el-date-picker>
+          <el-popover
+            placement="bottom"
+            title="Tải lên thư mục"
+            width="300"
+            trigger="click">
+            <div class="add-files">
+              <div class="add-labels-header">
+                Đính kèm file
+              </div><br>
+              <input type="file" @change="onChangeImage">
+              <button @click="uploadFile(card.id)">upload file</button>
+            </div>
+            <div class="card-action-btn" style="background-image: linear-gradient(to bottom right, #648455, #5a9e98)!important;color:white" slot="reference">
+              <i class="el-icon-paperclip" style="margin-right: 7px"> </i>
+              Đính kèm
+            </div>
+          </el-popover>
+          <div class="card-action-btn" style="background-image: linear-gradient(to bottom right, #648455, #5a9e98)!important;color:white;">
+            <i class="el-icon-time" style="margin-right: 7px"></i>Ngày hết hạn
+              <div class="input-deline" style="z-index: 1000;position: absolute;opacity: 0;">
+                <el-date-picker
+                    v-model="value1"
+                    type="datetime"
+                   @change="saveDeadline(card.id)"
+                    >
+                </el-date-picker>
+              </div>
           </div>
         </el-col>
       </el-row>
     </el-dialog>
     <draggable class="drag-cards"
                group="card"
+               :move="test2"
     >
       <div class="card" ref="card" @mouseover="cardHover" @mouseleave="cardHoverOut">
         <div class="card-more" ref="cardMore" @click="openCardAction" slot="reference"><i class="el-icon-edit"></i></div>
@@ -167,7 +238,8 @@
 
 <script>
 import api from "@/api";
-import draggable from 'vuedraggable'
+import draggable from 'vuedraggable';
+import moment from 'moment'
 
 export default {
   props: ['cardId'],
@@ -191,9 +263,103 @@ name: "Card",
       subCheckListName: '',
       checkListTitle: '',
       addSubCheckList: false,
+      file: '',
+      value1:'',
     }
   },
   methods: {
+    //them ngay het han
+    saveDeadline(id) {
+      let date = moment(this.value1).lang('vi').format('YYYY-MM-DD HH:mm:ss');
+      let data = {
+        deadline: date
+      }
+       api.storeDeadline(data,id).then(() => {
+        this.$message({message:'Them moi ngay het han thanh cong',type:'Success'});
+        this.getDetailCard()
+      })
+    },
+    // hoan thanh card 
+    changeStatusCard(id) {
+      let data = {
+        status: 3
+      }
+      api.changeStatusCard(data,id).then(() => {
+        this.$message({message:'Cong viec da hoan thanh',type:'success'});
+        this.getDetailCard()
+      })
+    },
+    //upload file cho the
+    onChangeImage(e){
+      if(e.target.files.length) {
+          this.file = e.target.files[0]
+        }
+    },
+    uploadFile(id) {
+      const data =new FormData();
+        data.append('file', this.file)
+          api.uploadFile(id,data).then(() => {
+            this.$message({
+              message: 'Tải dữ liệu lên thành công!',
+              type: 'success'
+            });
+            this.getDetailCard()
+          })
+    },
+    // chinh sua file
+    showEditFileCard(index) {
+      this.$refs.fileNameCard[index].style.display = 'none';
+      this.$refs.editFileCard[index].style.display = 'inline-block';
+    },
+    updateFileCard(id, nameFile, index) {
+      let data = {
+        name: nameFile,
+      }
+      api.editFileCard(id,data).then(() => {
+        this.$message({
+          message: 'Chỉnh sửa tệp tin thành công!',
+          type: 'success'
+        });
+        this.$refs.fileNameCard[index].style.display = 'inline-block';
+        this.$refs.editFileCard[index].style.display = 'none';
+        this.getDetailCard()
+      })
+    },
+    // xoa file card
+    deleteFileCard(id) {
+      this.$confirm('Bạn có chắc chắn muốn xóa không?', 'Cảnh báo', {
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy',
+        confirmButtonClass: 'btn-delete-list',
+        type: 'warning'
+      }).then(() => {
+        api.deleteFileCard(id).then(() => {
+          this.$message({
+            message: 'Xoá file thành công!',
+            type: 'success'
+          });
+          this.getDetailCard()
+        })
+      }).catch(() => {})
+    },
+    //change index card
+    test2(event) {
+      console.log(event)
+      let a = event.to.parentElement
+      let b = a.parentElement
+      let id = event.draggedContext.element.id
+      let data = {
+        index:event.draggedContext.futureIndex,
+        directory_id : b.parentElement.getAttribute('id')
+      }
+      api.changeIndexCard(data,id).then(() => {
+        this.$message({message:'Success',type:'success'});
+        this.getData()
+      }).catch(() => {
+          this.$message({message: 'Error', type: 'error'});
+      })
+    },
+
     green(id){
       let css = this.$refs.iconCheckGreen.style.display
       if(css == 'inline-block'){
@@ -449,18 +615,8 @@ name: "Card",
       this.addSubCheckList = false
     },
     changeStatusCheckListChild(id, status) {
-      if (status) {
-        status = 1
-        
-      } else {
-        status = 0
-    
-      }
-      api.updateStatusCheckListChild(id, status).then((response) => {
-        
-        console.log(response)
-      })
-      // this.$refs.refDeleteCheckListChild.style.display = 'block'
+      status = 1
+        api.updateStatusCheckListChild(id, status)
     },
     getDetailCard() {
       api.detailCard(this.cardId).then((response) => {
@@ -789,5 +945,24 @@ name: "Card",
       display: block;
       right: -5px;
     }
+    .delete-file-card {
+      margin-right: 20px;
+      cursor: pointer;
+    }
+    .delete-file-card:hover {
+      color: red;
+    }
+    .text-area-file-card {
+      width: 354px;
+      height: 17px;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    .inline {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+        
     
 </style>

@@ -105,6 +105,13 @@ export default {
             url: '/cards/' + id,
         })
     },
+    changeIndexCard(data,id) {
+        return apiAxios({
+          method: 'put',
+          url: '/cards/' + id + '/directory',
+          data: data
+        })
+      },
     getLabels() {
         return apiAxios({
             method: 'get',
@@ -177,5 +184,52 @@ export default {
             url: '/users/password',
             data: data
         })
-    }
+    },
+    // upload filte
+    uploadFile(id, data) {
+        return apiAxios({
+            method: 'post',
+            url: '/cards/'+id+'/upload-file',
+            data: data
+        })
+    },
+    //edit file card
+    editFileCard(id, data){
+        return apiAxios({
+            method: 'put',
+            url: '/files/'+id,
+            data: data
+        })
+    },
+    // xoa file card
+    deleteFileCard(id) {
+        return apiAxios({
+            method: 'delete',
+            url: '/files/'+id,
+        })
+    },
+    //keo tha index direction
+    changeIndexDirectory(id, data) {
+        return apiAxios({
+            method: 'put',
+            url: '/directories/' + id + '/index',
+            data: data
+        })
+    },
+    //tham moi thoi gian 
+    storeDeadline(data,id) {
+        return apiAxios({
+          method: 'put',
+          url: '/cards/' + id + '/change-status-deadline',
+          data: data
+        })
+      },
+    //trang thai da hoan thanh card 
+    changeStatusCard(data,id) {
+        return apiAxios({
+          method: 'put',
+          url: '/cards/' + id + '/change-status',
+          data: data
+        })
+      },
 }
