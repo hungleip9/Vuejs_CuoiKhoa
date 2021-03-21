@@ -39,7 +39,7 @@
               </div>
               <textarea ref="cardDescription" v-model="carDescription" class="add-card-description-textarea"
                   @blur="updateCardDescription">
-              </textarea>
+              </textarea><br>
             </el-col>
             <!-- them ngay het han -->
             <el-col :span="22" style="padding-right: 18px" id="description">
@@ -82,10 +82,15 @@
             </el-col>
             <el-col :span="22" style="padding-right: 18px" id="description">
               <div class="card-info-title">
-                Các tập tin đính kèm
+                Các tệp tin đính kèm
               </div>
               <div style="margin-top:10px" class="" ref="cardFile" @click="openEditCardDescription" v-for="(file, index) in card.files" :key="index">
-                <i class="el-icon-delete delete-file-card" @click="deleteFileCard(file.id)"></i> <b @click="showEditFileCard(index)" ref="fileNameCard">{{ file.name }}</b>
+                <img :src="'http://vuecourse.zent.edu.vn/storage/'+file.path" class="img-file">
+                <div class="box-name-file">
+                  <b @click="showEditFileCard(index)" ref="fileNameCard">{{ file.name }}</b> <i class="el-icon-delete delete-file-card" @click="deleteFileCard(file.id)"></i>
+                </div>
+                <div class="clear"></div>
+
                 <textarea ref="editFileCard" v-model="file.name" class="text-area-file-card" style="display:none" @blur="updateFileCard(file.id, file.name, index)">
               </textarea>
               </div>
@@ -106,11 +111,9 @@
 
               <textarea ref="editCheckListTitle" v-model="checkList.title" class="" style="display:none" @blur="updateCheckListTitle(index,checkList.id,checkList.title)">
               </textarea>
-
-              <el-progress :percentage="0" style="margin-bottom: 15px"></el-progress>
               <div class="check-list-childs" v-for="(child, index) in checkList.check_list_childs" :key="index">
-                <el-checkbox v-if="child.status == 1" v-model="child.status" checked @change="changeStatusCheckListChild(child.id, child.status)">{{child.title}}</el-checkbox>
-                <el-checkbox v-else v-model="child.status" @change="changeStatusCheckListChild(child.id, child.status)">{{child.title}}</el-checkbox>
+                <el-checkbox v-if="child.status === 1" checked @change="changeUnStatusCheckListChild(child.id, checkList.check_list_childs)">{{child.title}}</el-checkbox>
+                <el-checkbox v-else @change="changeStatusCheckListChild(child.id, checkList.check_list_childs)">{{child.title}}</el-checkbox>
                 <el-button size="small" style="padding: 5px 10px; margin-left: 5px; margin-left:50px;float:right" ref="refDeleteCheckListChild" @click="handleDeleteCheckListChild(child.id)" plain><i class="el-icon-delete"></i></el-button>
               </div>
               <input v-if="addSubCheckList" type="text" class="input-sub-check-list" placeholder="Thêm một mục" ref="inputSubCheckList" v-model="subCheckListName">
@@ -192,7 +195,7 @@
                 Đính kèm file
               </div><br>
               <input type="file" @change="onChangeImage">
-              <button @click="uploadFile(card.id)">upload file</button>
+              <button @click="uploadFile(card.id)" style="margin-top:10px!important">Upload file</button>
             </div>
             <div class="card-action-btn" style="background-image: linear-gradient(to bottom right, #648455, #5a9e98)!important;color:white" slot="reference">
               <i class="el-icon-paperclip" style="margin-right: 7px"> </i>
@@ -265,6 +268,7 @@ name: "Card",
       addSubCheckList: false,
       file: '',
       value1:'',
+      tick:0
     }
   },
   methods: {
@@ -275,7 +279,7 @@ name: "Card",
         deadline: date
       }
        api.storeDeadline(data,id).then(() => {
-        this.$message({message:'Them moi ngay het han thanh cong',type:'Success'});
+        this.$message({message:'Thêm mới ngày hết hạn thành công!',type:'Success'});
         this.getDetailCard()
       })
     },
@@ -285,7 +289,7 @@ name: "Card",
         status: 3
       }
       api.changeStatusCard(data,id).then(() => {
-        this.$message({message:'Cong viec da hoan thanh',type:'success'});
+        this.$message({message:'Công việc đã hoàn thành!',type:'success'});
         this.getDetailCard()
       })
     },
@@ -614,9 +618,21 @@ name: "Card",
     closeAddSubCheckList() {
       this.addSubCheckList = false
     },
-    changeStatusCheckListChild(id, status) {
-      status = 1
-        api.updateStatusCheckListChild(id, status)
+    changeStatusCheckListChild(id, child) {
+      let data = {
+        status : 1,
+      }
+      api.updateStatusCheckListChild(id, data).then(() => {
+          this.tick = this.tick + 100/(child.length)
+        })
+    },
+    changeUnStatusCheckListChild(id, child){
+      let data = {
+        status : 0,
+      }
+      api.updateStatusCheckListChild(id, data).then(() => {
+          this.tick = this.tick - 100/(child.length)
+        })
     },
     getDetailCard() {
       api.detailCard(this.cardId).then((response) => {
@@ -962,6 +978,24 @@ name: "Card",
       position: absolute;
       right: 10px;
       top: 10px;
+    }
+    .img-file {
+      width: 60px;
+      height: 60px;
+      float: left;
+    }
+    .box-name-file {
+      display: inline-block;
+      float: left;
+      margin-top: 24px;
+      margin-left: 20px;
+      width: 387px;
+      i {
+        float: right;
+      }
+    }
+    .clear {
+      clear: both;
     }
         
     

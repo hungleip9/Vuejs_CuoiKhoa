@@ -75,7 +75,7 @@ export default {
       }
       api.editDirectoryName(this.directory.id, data).then(() => {
         this.$message({
-          message: 'cập nhật danh sách thành công!',
+          message: 'Cập nhật danh sách thành công!',
           type: 'success'
         });
         this.reloadDirectories()
@@ -83,7 +83,7 @@ export default {
         this.$refs.directoryName.style.background = 'rgba(0,0,0,0)'
       }).catch(() => {
         this.$message({
-          message: 'cập nhật danh sách thành công!',
+          message: 'Cập nhật danh sách thành công!',
           type: 'error'
         });
       })

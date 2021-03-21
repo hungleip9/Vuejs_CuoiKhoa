@@ -2,7 +2,7 @@
   <div class="homeWrap">
     <div class="page-header">
       <div class="page-title">
-        Bảng chính
+        Lê Quang Hùng
       </div>
     </div>
     <div class="main-content">

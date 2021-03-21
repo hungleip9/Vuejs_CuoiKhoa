@@ -158,11 +158,11 @@ export default {
             url: '/check-lists/' + id,
         })
     },
-    updateStatusCheckListChild(id, status) {
+    updateStatusCheckListChild(id, data) {
         return apiAxios({
             method: 'put',
-            url: '/check-list-childs/' + id + '/change-status',
-            status: status
+            url: 'check-list-childs/'+id+'/change-status',
+            data: data
         })
     },
     updateUser(data) {
