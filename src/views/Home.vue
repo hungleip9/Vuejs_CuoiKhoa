@@ -2,7 +2,7 @@
   <div class="homeWrap">
     <div class="page-header">
       <div class="page-title">
-        Lê Quang Hùng
+        LÊ QUANG HÙNG
       </div>
     </div>
     <div class="main-content">
@@ -13,20 +13,19 @@
             group="directories"
             :move="moveDirectory"
         >
-          <List class="directory" v-for="(directory, index) in directories" :key="index"
+          <List class="directory" v-for="(directory) in directories" :key="directory.id" :id="directory.id"
                 :directory="directory"
                 @reloadDirectories="getData"
           />
-        
-        <div class="listWrap" ref="addListBtn" @click="createListForm()">
-          <i class="el-icon-plus"></i>
-          Thêm danh sách khác
-        </div>
-        <div class="listWrap formListWrap" id="addWrap" ref="addListWrap">
-          <el-input placeholder="Nhập tiêu đề danh sách..." v-model="directoryName"></el-input>
-          <el-button type="success" class="add-list" @click="createList">Thêm danh sách</el-button>
-          <i class="el-icon-close close-add-list" @click="cancelCreateList()"></i>
-        </div>
+          <div class="listWrap add-directory-btn" ref="addListBtn" @click="createListForm()">
+            <i class="el-icon-plus"></i>
+            Thêm danh sách khác
+          </div>
+          <div class="listWrap add-directory-form" id="addWrap" ref="addListWrap">
+            <el-input placeholder="Nhập tiêu đề danh sách..." v-model="directoryName"></el-input>
+            <el-button type="success" class="add-list" @click="createList">Thêm danh sách</el-button>
+            <i class="el-icon-close close-add-list" @click="cancelCreateList()"></i>
+          </div>
         </draggable>
       </div>
     </div>
@@ -63,13 +62,6 @@ export default {
     ...mapMutations('home', [
        'addList'
     ]),
-    moveDirectory(e) {
-      let id = e.draggedContext.element.id
-      let data = {
-        index: e.draggedContext.futureIndex
-      }
-      api.changeIndexDirectory(id, data)
-    },
     createListForm() {
       this.$refs.addListBtn.style.display = 'none'
       this.$refs.addListWrap.style.display = 'block'
@@ -89,6 +81,7 @@ export default {
         this.$message({
           message: 'Thêm mới thành công!',
           type: "success",
+          center: true
         })
         this.getData()
         this.cancelCreateList()
@@ -99,9 +92,17 @@ export default {
         })
       })
     },
+    moveDirectory(e) {
+      let id = e.draggedContext.element.id
+      let data = {
+        index: e.draggedContext.futureIndex
+      }
+      api.changeIndexDirectory(id, data)
+    },
     getData() {
       api.getDirectories().then((response) => {
         this.directories = response.data.data
+        console.log(response.data.data)
       })
     },
   },
@@ -112,6 +113,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .homeWrap::-webkit-scrollbar {
+    width: 8px;
+  }
+  .homeWrap::-webkit-scrollbar-track {
+    border-radius: 7px;
+    background-color: #4a4a727d;
+  }
+  .homeWrap::-webkit-scrollbar {
+    height: 10px;
+    //width: 98%;
+  }
+  .homeWrap::-webkit-scrollbar-thumb:hover {
+    background: #d3d3d87d;
+  }
+  .homeWrap::-webkit-scrollbar-track {
+    border-radius: 7px;
+    background-color: #4f4f5073;
+  }
+  .homeWrap::-webkit-scrollbar-thumb {
+    background: #bcbcbe63;
+    border-radius: 7px;
+  }
   .homeWrap {
     height: 95vh;
     overflow-x: auto;
@@ -119,55 +142,66 @@ export default {
     .page-header {
       height: auto;
       overflow: hidden;
+      position: fixed;
       .page-title {
         margin: 7px;
         padding: 7px;
         float: left;
-        background-image: linear-gradient(to bottom right, #648455, #5a9e98);
         color: #ffffff;
         border-radius: 4px;
         cursor: pointer;
+        background-image: linear-gradient(to bottom right, #648455, #5a9e98);
       }
     }
     .main-content {
+      position: relative;
+      outline: none;
       margin: 0 7px;
-      .drag-wrap {
-        height: auto;
-        display: flex;
-        width: auto;
-        .directory {
+      .content {
+        position: absolute;
+        overflow-x: auto;
+        top: 45px;
+        .drag-wrap {
+          height: auto;
+          display: flex;
+          width: auto;
+          .directory {
+            //display: inline-block;
+          }
+        }
+        .listWrap {
+          padding: 10px 8px;
+          text-align: left;
+          background-image: linear-gradient(to bottom right, #648455, #5a9e98);
+          border-radius: 4px;
+          width: 272px;
+          box-sizing: border-box;
+          color: #ffffff;
+          float: left;
+          margin-right: 15px;
+          cursor: pointer;
           //display: inline-block;
         }
-      }
-      .listWrap {
-        padding: 10px 8px;
-        text-align: left;
-        background-image: linear-gradient(to bottom right, #648455, #5a9e98);
-        border-radius: 4px;
-        width: 272px;
-        box-sizing: border-box;
-        color: #ffffff;
-        float: left;
-        margin-right: 15px;
-        cursor: pointer;
-        height: 53px;
-        //display: inline-block;
-      }
-      .formListWrap {
-        height: 86px!important;
-      }
-      #addWrap {
-        background: #ffffff !important;
-        color: #5e6c84;
-        display: none;
-        .add-list {
-          padding: 7px 10px;
-          margin: 4px 10px 0 0;
+        .add-directory-btn {
+          height: 38px;
         }
-        .close-add-list {
-          font-size: 16px;
+        .add-directory-form {
+          height: 90px;
+        }
+        #addWrap {
+          background: #ffffff !important;
+          color: #5e6c84;
+          display: none;
+          .add-list {
+            padding: 7px 10px;
+            margin: 4px 10px 0 0;
+          }
+          .close-add-list {
+            font-size: 16px;
+          }
         }
       }
+
     }
   }
 </style>

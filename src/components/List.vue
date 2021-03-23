@@ -7,11 +7,16 @@
                @blur="cancelEditName"
                @keydown.enter="updateDirectoryName"
         >
-        <el-button class="list-more-action" size="mini" style="border: 0; background-color: #ebecf0; color:green">
+        <el-button class="list-more-action" size="mini" style="border: 0; background-color: #ebecf0">
           <i class="el-icon-close" @click="deleteList"></i>
         </el-button>
       </div>
-      <Card class="card" v-for="(card, index) in directory.cards" :key="index" :cardId="card.id"/>
+      <draggable class="drag-cards"
+                 group="cards"
+                 :list="directory.cards"
+                 :move="moveCard">
+        <Card v-for="(card) in directory.cards" :key="card.id" :cardId="card.id" @reload="reloadDirectories"/>
+      </draggable>
       <div class="btn-add-card" ref="btnAddCard">
         <el-button type="info" size="small" class="add-card" @click="addCard()">
           <i class="el-icon-plus"></i>
@@ -31,12 +36,14 @@
 import { mapState, mapMutations } from 'vuex'
 import api from '../api'
 import Card from "@/components/Card";
+import draggable from 'vuedraggable'
 
 export default {
   props: ['directory'],
   name: "Directory",
   components: {
-    Card
+    Card,
+    draggable
   },
   computed: {
     ...mapState('home', [
@@ -75,15 +82,14 @@ export default {
       }
       api.editDirectoryName(this.directory.id, data).then(() => {
         this.$message({
-          message: 'Cập nhật danh sách thành công!',
+          message: 'cập nhật danh sách thành công!',
           type: 'success'
         });
         this.reloadDirectories()
         this.cancelEditName()
-        this.$refs.directoryName.style.background = 'rgba(0,0,0,0)'
       }).catch(() => {
         this.$message({
-          message: 'Cập nhật danh sách thành công!',
+          message: 'cập nhật danh sách thành công!',
           type: 'error'
         });
       })
@@ -141,10 +147,22 @@ export default {
     },
     reloadDirectories() {
       this.$emit('reloadDirectories')
+    },
+    moveCard(e) {
+      let id = e.draggedContext.element.id
+      let index = e.draggedContext.futureIndex
+      let a = e.to.parentElement
+      let data = {
+        index: index,
+        directory_id: a.parentElement.getAttribute('id')
+      }
+      console.log(data)
+      api.changeCardDirectory(id, data).then(() => {
+
+      })
     }
   },
   mounted() {
-
   }
 }
 </script>
@@ -153,7 +171,7 @@ export default {
   .listWrap {
     padding: 6px 8px;
     text-align: left;
-    background-image: linear-gradient(to bottom right, #648455, #5a9e98);
+    background: #ebecf0;
     border-radius: 4px;
     width: 272px;
     box-sizing: border-box;
@@ -170,12 +188,11 @@ export default {
       .list-name {
         width: 90%;
         height: 20px;
-        background:rgba(0,0,0,0);
+        background: #ebecf0;
         border: none;
         font-size: 14px;
         font-weight: bold;
-        color: black;
-        outline: none;
+        color: #455167;
       }
       .list-more-action {
         position: absolute;
@@ -189,20 +206,14 @@ export default {
       width: 100%;
       padding-left: 10px;
       text-align: left;
-      color: white;
-      font-weight: bold;
-      background-image: linear-gradient(to bottom right, #648455, #5a9e98);
+      color: #5e6c84;
+      background-color: #ebecf0;
       border-color: #ebecf0
     }
     .form-add-card {
       display: none;
       .el-input {
         margin-bottom: 7px;
-      }
-      i {
-        color: white;
-        cursor: pointer;
-        margin-left: 10px;
       }
     }
   }

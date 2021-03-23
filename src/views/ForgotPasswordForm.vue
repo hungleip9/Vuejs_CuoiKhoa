@@ -3,52 +3,46 @@
     <div class="mainWrap">
       <div class="header">LẤY LẠI MẬT KHẨU</div>
       <div class="description">
+        Bạn vui lòng nhập email đăng nhập vào ô bên dưới để nhận email hướng dẫn lấy lại mật khẩu.
       </div>
       <div class="inputWrap" style="margin-bottom: 24px">
-        <el-input placeholder="Mật khẩu" v-model="newpassword" type="password"></el-input>
-        <el-input placeholder="Nhập lại mật khẩu" v-model="repassword" type="password"></el-input>
-        <p>Nhập email cần lấy lại mật khẩu</p>
+        <el-input placeholder="Email" v-model="email" type="email" @input="onChangeEmail($event)"></el-input>
+        <div v-if="emailError" class="error"><i class="el-icon-warning"></i> Email không được bỏ trống</div>
       </div>
-      <button type="submit" class="btn-submit" @click="submit()">Cập nhật mật khẩu</button>
-      <el-button @click="back()"><i class="el-icon-back"></i> Trở về trang chủ</el-button>
+      <button class="btn-submit" @click="submit()">GỬI EMAIL</button>
+      <el-button @click="back()"><i class="el-icon-back"></i> Trở về trang đăng nhập</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import api from '../api'
 export default {
   name: "Register",
   data() {
     return {
-      newpassword: '',
-      repassword:'',
+      email: '',
+      emailError: false
     }
   },
   methods: {
     back() {
-      this.$router.push('/path/home')
+      this.$router.push('login')
     },
     submit() {
-       if(this.newpassword !== this.repassword){
+      if (this.email.length == '') {
+        this.emailError = true
+      }
+      if (!this.emailError) {
         this.$message({
-          message: 'Mật khẩu nhập lại không trùng!',
-          type: 'error'
+          message: 'Gửi email thành công!',
+          type: 'success'
         });
-      } else {
-        let data = {
-        password: this.newpassword,
-        password_confirmation: this.repassword
-        }
-          api.changePassWord(data).then(() => {
-          this.$message({
-            message: 'Thay đổi mật khẩu thành công!',
-            type: 'success',
-            data: data
-          });
-        })
       }
     },
+    onChangeEmail(email) {
+      this.email = email
+      this.emailError = false
+    }
   }
 }
 </script>
@@ -84,10 +78,9 @@ export default {
     }
   }
   .btn-submit {
-    cursor: pointer;
     width: 100%;
     height: 50px;
-    background-image: linear-gradient(to bottom right, #648455, #5a9e98);
+    background-color: #f4a7bb;
     color: #ffffff;
     border: 0;
     border-radius: 4px;

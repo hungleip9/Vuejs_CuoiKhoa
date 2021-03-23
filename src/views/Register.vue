@@ -5,10 +5,6 @@
     </div>
     <div class="title">Đăng kí tài khoản</div>
     <el-form :model="ruleForm" :label-position="label" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
-      <el-form-item prop="name">
-        <label style="float: left" ><span style="color: #f54b5e">*</span> Name</label>
-        <el-input type="text" v-model="ruleForm.name"></el-input>
-      </el-form-item>
       <el-form-item prop="email">
         <label style="float: left" ><span style="color: #f54b5e">*</span> Email</label>
         <el-input v-model="ruleForm.email"></el-input>
@@ -17,27 +13,40 @@
         <label style="float: left" ><span style="color: #f54b5e">*</span> Mật khẩu</label>
         <el-input type="password" v-model="ruleForm.password"></el-input>
       </el-form-item>
+      <el-form-item prop="checkPass">
+        <label style="float: left" ><span style="color: #f54b5e">*</span> Xác nhận mật khẩu</label>
+        <el-input type="password" v-model="ruleForm.checkPass"></el-input>
+      </el-form-item>
     </el-form>
-    <div class="register">
-      <el-button @click="login()">Đăng nhập</el-button>
-    </div>
-    <button class="btn-login" @click="register('ruleForm')">
-      ĐĂNG KÍ
+    <button class="btn-login" @click="handleRegister('ruleForm')">
+      ĐĂNG KÝ
     </button>
-    
+    <div class="register">
+      <el-button @click="login()">ĐĂNG NHẬP</el-button>
+    </div>
   </div>
 </template>
 
 <script>
 import api from '../api'
+
 export default {
   name: "LoginForm",
   data() {
+    var confirm = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Yêu cầu xác nhận mật khẩu'));
+      } else if (value !== this.ruleForm.password) {
+        callback(new Error('Mật khẩu không chính xác!'));
+      } else {
+        callback();
+      }
+    };
     return {
       ruleForm: {
         email: '',
         password: '',
-        name: '',
+        checkPass: '',
       },
       rules: {
         email: [
@@ -48,42 +57,35 @@ export default {
           { required: true, message: 'Mật khẩu không được bỏ trống!', trigger: 'change' },
           { min: 6, message: 'Mật khẩu không được ít hơn 6 kí tự', trigger: 'blur' },
         ],
-        name: [
-          { required: true, message: 'Tên không được bỏ trống!', trigger: 'change' },
-          { min: 6, message: 'Tên không được ít hơn 6 kí tự', trigger: 'blur' },
+        checkPass: [
+          { validator: confirm, trigger: 'blur' }
         ],
       },
       label: 'top',
     }
   },
   methods: {
-    register(formName) {
+    forgotPass() {
+      this.$router.push('forgot-password')
+    },
+    handleRegister(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // this.$message({
-          //   message: 'Đăng kí thành công!',
-          //   type: 'success',
-          // });
-          // console.log(this.ruleForm)
-          // this.$router.push('/path/home')
           let data = {
-          name: this.ruleForm.name,
-          email: this.ruleForm.email,
-          password: this.ruleForm.password
+            name: this.ruleForm.name,
+            email: this.ruleForm.email,
+            password: this.ruleForm.password
           }
-            api.register(data).then(() => {
+          api.register(data).then(() => {
             this.$message({
-              message: 'Đăng kí thành công!',
-              type: 'success',
-              data: data
-            });
+              message: 'Chào mừng bận đén với BLACKPINK!',
+              type: "success",
+              center: true
+            })
+            if (this.$router.currentRoute.name !== 'Home') {
+              this.$router.push({ name: 'Home' })
+            }
           })
-        } else {
-          this.$message({
-            message: 'Đăng kí thất bại!',
-            type: 'error'
-          });
-          return false;
         }
       });
     },
@@ -104,7 +106,7 @@ export default {
   .logo {
     width: 100%;
     img {
-      width: 100px;
+      width: 200px;
     }
   }
   .title {
@@ -112,6 +114,7 @@ export default {
     padding: 10px 0;
     font-size: 20px;
     font-weight: bold;
+    color: #328146;
   }
   .inputWrap {
     width: 100%;
@@ -131,9 +134,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    
     .el-button {
-      margin-left: 322px;
       border: 0;
       color: #0080dd;
       padding: 7px;

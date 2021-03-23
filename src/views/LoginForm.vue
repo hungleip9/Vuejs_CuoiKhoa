@@ -13,12 +13,13 @@
         <el-input type="password" v-model="ruleForm.password"></el-input>
       </el-form-item>
     </el-form>
-    <div class="forgotPass">
+    <div class="register" style="margin-left: 342px;">
       <el-button @click="register()">Đăng kí</el-button>
     </div>
     <button class="btn-login" @click="handleogin('ruleForm')">
       ĐĂNG NHẬP
     </button>
+    
   </div>
 </template>
 
@@ -51,9 +52,6 @@ export default {
   },
   methods: {
     ...mapMutations('auth', ['updateLoginStatus', 'updateAuthUser', 'updateToken']),
-    forgotPass() {
-      this.$router.push('forgot-password')
-    },
     handleogin(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -62,10 +60,6 @@ export default {
             password: this.ruleForm.password,
           }
           api.login(data).then((response) => {
-            this.$message({
-              message: 'Đăng nhập thành công!',
-              type: 'success'
-            });
             this.updateLoginStatus({isAuthenticated: true})
             localStorage.setItem('access_token', response.data.access_token)
             this.updateToken(response.data.access_token)

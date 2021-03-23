@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from "../store";
 import router from "../router";
+
 // Lấy ra các biến cần thiết: base url, token
 const baseUrl = process.env.VUE_APP_BASE_URL;
 const token = localStorage.getItem('access_token');
@@ -105,13 +106,6 @@ export default {
             url: '/cards/' + id,
         })
     },
-    changeIndexCard(data,id) {
-        return apiAxios({
-          method: 'put',
-          url: '/cards/' + id + '/directory',
-          data: data
-        })
-      },
     getLabels() {
         return apiAxios({
             method: 'get',
@@ -125,6 +119,20 @@ export default {
             data: data
         })
     },
+    addLabel(id, data) {
+        return apiAxios({
+            method: 'post',
+            url: '/cards/' + id + '/attach-labels',
+            data: data
+        })
+    },
+    removeLabelFromCard(id, data) {
+        return apiAxios({
+            method: 'delete',
+            url: 'cards/'+ id +'/detach-labels',
+            data: data
+        })
+    },
     deleteLabel(id) {
         return apiAxios({
             method: 'delete',
@@ -135,13 +143,6 @@ export default {
         return apiAxios({
             method: 'post',
             url: '/check-lists',
-            data: data
-        })
-    },
-    updateCheckList(id,data) {
-        return apiAxios({
-            method: 'put',
-            url: '/check-lists/' + id,
             data: data
         })
     },
@@ -161,54 +162,52 @@ export default {
     updateStatusCheckListChild(id, data) {
         return apiAxios({
             method: 'put',
-            url: 'check-list-childs/'+id+'/change-status',
+            url: '/check-list-childs/'+ id +'/change-status',
             data: data
         })
     },
     updateUser(data) {
         return apiAxios({
-            method: 'put',
+            method: 'post',
             url: '/users',
             data: data
         })
     },
-    deleteCheckListChild(id) {
+    cardDeadline(id, data) {
         return apiAxios({
-            method: 'delete',
-            url: '/check-list-childs/' + id,
+            method: 'put',
+            url: '/cards/'+ id +'/change-status-deadline',
+            data: data
         })
     },
-    changePassWord(data) {
+    changePassword(data) {
         return apiAxios({
             method: 'put',
             url: '/users/password',
             data: data
         })
     },
-    // upload filte
+    updateCardStatus(id, data) {
+        return apiAxios({
+            method: 'put',
+            url: '/cards/'+ id +'/change-status',
+            data: data
+        })
+    },
     uploadFile(id, data) {
         return apiAxios({
             method: 'post',
-            url: '/cards/'+id+'/upload-file',
+            url: '/cards/'+ id +'/upload-file',
             data: data
         })
     },
-    //edit file card
-    editFileCard(id, data){
+    changeFileName(id, data) {
         return apiAxios({
             method: 'put',
-            url: '/files/'+id,
+            url: '/files/' + id,
             data: data
         })
     },
-    // xoa file card
-    deleteFileCard(id) {
-        return apiAxios({
-            method: 'delete',
-            url: '/files/'+id,
-        })
-    },
-    //keo tha index direction
     changeIndexDirectory(id, data) {
         return apiAxios({
             method: 'put',
@@ -216,20 +215,30 @@ export default {
             data: data
         })
     },
-    //tham moi thoi gian 
-    storeDeadline(data,id) {
+    changeCardDirectory(id, data) {
         return apiAxios({
-          method: 'put',
-          url: '/cards/' + id + '/change-status-deadline',
-          data: data
+            method: 'put',
+            url: '/cards/' + id + '/directory',
+            data: data
         })
-      },
-    //trang thai da hoan thanh card 
-    changeStatusCard(data,id) {
+    },
+    changeCardIndex(id, data) {
         return apiAxios({
-          method: 'put',
-          url: '/cards/' + id + '/change-status',
-          data: data
+            method: 'put',
+            url: '/cards/' + id + '/index',
+            data: data
         })
-      },
+    },
+    deleteCard(id) {
+        return apiAxios({
+            method: 'delete',
+            url: '/cards/' + id,
+        })
+    },
+    deleteFile(id) {
+        return apiAxios({
+            method: 'delete',
+            url: '/files/' + id,
+        })
+    }
 }
