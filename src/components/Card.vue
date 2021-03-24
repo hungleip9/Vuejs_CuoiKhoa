@@ -681,7 +681,6 @@ name: "Card",
       margin-bottom: 10px;
     }
     .form-add-labels {
-      display: none;
       font-family: Arial;
       .label-name {
         width: 98%;

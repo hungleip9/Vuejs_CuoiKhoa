@@ -78,7 +78,7 @@ export default {
               message: 'Cập nhật thành công!',
               type: 'success'
             });
-            this.$router.push('profile')
+            this.$router.push('/path/home')
           }).catch(() => {
             this.$message({
               message: 'Cập nhật thất bại!',
@@ -111,7 +111,7 @@ export default {
       margin: 7px;
       padding: 7px;
       float: left;
-      background: rgba(220 203 211 / 47%);
+      background-image: linear-gradient(to bottom right, #648455, #5a9e98);
       color: #ffffff;
       border-radius: 4px;
       cursor: pointer;
@@ -152,7 +152,7 @@ export default {
         .btn-login {
           width: 100%;
           height: 50px;
-          background-color: #f4a7bb;
+          background-image: linear-gradient(to bottom right, #648455, #5a9e98);
           color: #ffffff;
           border: 0;
           border-radius: 4px;

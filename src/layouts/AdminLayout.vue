@@ -65,13 +65,13 @@ export default {
       else this.$refs.usersetting.style.visibility = 'visible'
     },
     openProfile() {
-      this.$router.push('profile')
+      this.$router.replace('/profile');
       if (this.$refs.usersetting.style.visibility == 'visible')
         this.$refs.usersetting.style.visibility = 'hidden'
       else this.$refs.usersetting.style.visibility = 'visible'
     },
     goToHome() {
-      this.$router.push('home')
+      this.$router.push('/path/home')
     },
     handlelogout() {
       localStorage.removeItem('access_token')

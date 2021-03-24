@@ -79,6 +79,7 @@ export default {
               message: 'Cập nhật thành công!',
               type: 'success'
             });
+            this.$router.replace('/path/home');
             console.log(response)
             api.getAuthUser().then((response) => {
               if (response) {
@@ -207,7 +208,7 @@ export default {
         .btn-login {
           width: 100%;
           height: 50px;
-          background-color: #f4a7bb;
+          background-image: linear-gradient(to bottom right, #648455, #5a9e98);
           color: #ffffff;
           border: 0;
           border-radius: 4px;
