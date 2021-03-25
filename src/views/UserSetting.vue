@@ -3,8 +3,10 @@
     <div class="page-header"></div>
     <div class="main-content">
       <div class="user-profile">
+        <el-button class="btn-back" @click="back">Back To Home</el-button>
         <div class="loginWrap">
           <div class="profile-title">{{this.ruleForm.email}}</div>
+          
           <div class="avatar">
             <label for="avatar" @mouseover="hoverAvatar" @mouseleave="hoverLeaveAvatar">
               <div class="avatarHover" ref="avatarHover">
@@ -111,6 +113,9 @@ export default {
     deleteAvatar() {
       this.uploadAvatar = ''
       this.avatarUrl = ''
+    },
+    back() {
+      this.$router.replace('path/home')
     }
   },
   mounted() {
@@ -150,6 +155,10 @@ export default {
       margin: 0 auto;
       background: #ffffff;
       border-radius: 10px;
+      .btn-back {
+        margin-left: -358px;
+        margin-top: 10px;
+      }
       .loginWrap {
         position: relative;
         width: 500px;

@@ -12,7 +12,7 @@
             <input type="text" v-model="card.title" class="detail-card-title" @keydown.enter="updateCardName">
           </div>
           <el-row>
-            <el-col :span="2">a</el-col>
+            <el-col :span="2" style="color:white">a</el-col>
             <el-col :span="22">
               <div v-if="card.labels" class="" style="margin-bottom: 10px">
                 <div style="margin-bottom: 5px">NHÃN</div>
@@ -59,13 +59,29 @@
             </el-col>
             <el-col :span="22" style="padding-right: 18px">
               <div class="card-info-title">
-                {{checkList.title}}
+                <p @click="openUpdateCheckList(index)" ref="openUpdateCheckList">{{checkList.title}}</p>
+                <textarea ref="updateCheckList" v-model="checkList.title" class="edit-check-list-title"
+                        @blur="updateCheckList(checkList.id, index, checkList.title)" style="display:none; width:400px"></textarea>
                 <el-button size="small" style="padding: 5px 10px; margin-left: 5px; float: right" @click="handleDeleteCheckList(checkList.id)" plain>Xóa</el-button>
               </div>
               <el-progress :percentage="checkPercentComplete(checkList.check_list_childs)" style="margin-bottom: 15px"></el-progress>
               <div class="check-list-childs" v-for="(child, index) in checkList.check_list_childs" :key="index">
-                <el-checkbox v-if="child.status == 1" v-model="child.status" checked @change="changeStatusCheckListChild(child.id, child.status)">{{child.title}}</el-checkbox>
-                <el-checkbox v-else v-model="child.status" @change="changeStatusCheckListChild(child.id, child.status)">{{child.title}}</el-checkbox>
+                <el-checkbox v-if="child.status == 1" v-model="child.status" checked @change="changeStatusCheckListChild(child.id, child.status)" ref="checkListChildTitle1">{{child.title}}</el-checkbox>
+                <el-checkbox v-else v-model="child.status" @change="changeStatusCheckListChild(child.id, child.status)" ref="checkListChildTitle0">{{child.title}}</el-checkbox>
+                <el-popover
+                  placement="bottom"
+                  title="Sửa công việc con"
+                  width="200"
+                  trigger="click">
+                  <el-input ref="updateCheckListChild" v-model="child.title"
+                        style="width:200px"
+                        type="text">
+                  </el-input>
+                  <el-button type="success" class="btn-edit-delete" @click="updateCheckListChild(child.id, child.title)">Sửa</el-button>
+                  <el-button type="danger" class="btn-edit-delete" @click="deleteCheckListChild(child.id)"><i class="el-icon-delete"></i></el-button>
+                  <i class="el-icon-edit edit-check-list-child" style="margin-left:400px;cursor: pointer;" slot="reference"></i>
+                </el-popover>
+                
               </div>
               <input v-if="addSubCheckList" type="text" class="input-sub-check-list" placeholder="Thêm một mục" ref="inputSubCheckList" v-model="subCheckListName">
               <div v-if="addSubCheckList" ref="btnSubCheckList">
@@ -272,6 +288,45 @@ name: "Card",
     }
   },
   methods: {
+    updateCheckListChild(id, title){
+      let data = {
+        title: title
+      }
+      api.editSubCheckList(id, data).then(() => {
+        this.$message({
+            message: 'Sửa Thành công!',
+            type: 'success'
+          });
+          this.getDetailCard()
+      })
+    },
+    deleteCheckListChild(id) {
+      api.deleteSubCheckList(id).then(()=> {
+          this.$message({
+            message: 'Xoá Thành Công!',
+            type: 'success'
+          });
+          this.getDetailCard()
+      })
+    },
+    openUpdateCheckList(index) {
+      this.$refs.openUpdateCheckList[index].style.display = 'none'
+      this.$refs.updateCheckList[index].style.display = 'block'
+    },
+    updateCheckList(id, index, title) {
+      this.$refs.openUpdateCheckList[index].style.display = 'block'
+      this.$refs.updateCheckList[index].style.display = 'none'
+      let data = {
+        title : title
+      }
+      api.editChecklist(id,data).then(() => {
+        this.$message({
+            message: 'Thành công!',
+            type: 'success'
+          });
+          this.getDetailCard()
+      })
+    },
     openEditFileName(index) {
       this.$refs.openEditFileName[index].style.display = 'none'
       this.$refs.editFileName[index].style.display = 'block'
@@ -572,6 +627,14 @@ name: "Card",
 </script>
 
 <style lang="scss" scoped>
+.btn-edit-delete {
+        margin-top: 10px!important;
+        margin-left: 25px;
+    }
+  .edit-check-list-child {
+    position: absolute;
+    right: 30px;
+  }
   .detail-card-header {
     width: 95%;
     position: absolute;

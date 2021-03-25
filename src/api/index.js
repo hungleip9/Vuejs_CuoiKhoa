@@ -146,11 +146,31 @@ export default {
             data: data
         })
     },
+    editChecklist(id, data) {
+        return apiAxios({
+            method: 'put',
+            url: '/check-lists/' + id,
+            data: data
+        })
+    },
     createSubCheckList(data) {
         return apiAxios({
             method: 'post',
             url: '/check-list-childs',
             data: data
+        })
+    },
+    editSubCheckList(id, data) {
+        return apiAxios({
+            method: 'put',
+            url: '/check-list-childs/' +id,
+            data: data
+        })
+    },
+    deleteSubCheckList(id) {
+        return apiAxios({
+            method: 'delete',
+            url: '/check-list-childs/' +id,
         })
     },
     deleteCheckList(id) {
