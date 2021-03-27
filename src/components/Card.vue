@@ -29,7 +29,7 @@
                   <div class="card-action-btn" style="padding-right: 7px">
                     {{formatDate(card.deadline)}}
                     <div class="status-deadline-fail" v-if="formatDate(deadline) < moment(new Date()).format('YYYY-MM-DD HH:mm:ss') && card.status == 0">QUÁ HẠN</div>
-                    <div class="status-deadline-success" v-else-if="card.status ==1">HOÀN TẤT</div>
+                    <div class="status-deadline-success" v-else-if="card.status === 1">HOÀN TẤT</div>
                   </div>
                 </el-checkbox>
               </div>
@@ -46,8 +46,11 @@
               <div v-if="card.description" class="card-description" ref="description" @click="openEditCardDescription">
                 {{ card.description }}
               </div>
-              <div v-else class="add-card-description" ref="cardDescriptionBtn">
+              <div v-else class="add-card-description" ref="cardDescriptionBtn" @click="openEditCardDescription">
                 Thêm mổ tả chi tiết...
+              </div>
+              <div class="card-description" ref="descriptionBtn" @click="openEditCardDescription" style="display:none">
+                {{ card.description }}
               </div>
               <textarea ref="cardDescription" v-model="carDescription" class="add-card-description-textarea"
                         @blur="updateCardDescription"></textarea>
@@ -77,9 +80,9 @@
                         style="width:200px"
                         type="text">
                   </el-input>
-                  <el-button type="success" class="btn-edit-delete" @click="updateCheckListChild(child.id, child.title)">Sửa</el-button>
-                  <el-button type="danger" class="btn-edit-delete" @click="deleteCheckListChild(child.id)"><i class="el-icon-delete"></i></el-button>
-                  <i class="el-icon-edit edit-check-list-child" style="margin-left:400px;cursor: pointer;" slot="reference"></i>
+                  <div class="btn-edit-child" @click="updateCheckListChild(child.id, child.title)"><i class="fa fa-pencil" aria-hidden="true"></i> Sửa</div>
+                  <div class="btn-edit-child" @click="deleteCheckListChild(child.id)"><i class="el-icon-delete"></i> Xoá</div>
+                  <i class="fa fa-ellipsis-v edit-check-list-child" style="margin-left:400px;cursor: pointer;" slot="reference"></i>
                 </el-popover>
                 
               </div>
@@ -105,8 +108,8 @@
                 <img class="card-files" :src="baseFileUrl + file.path" alt="">
                 <div class="card-files-info">
                   <div class="file-name" @click="openEditFileName(index)" ref="openEditFileName">{{file.name}}</div>
-                  <textarea ref="editFileName" v-model="file.name" class="" style="display:none"
-                        @blur="editFileName(file.id, index, file.name)"></textarea>
+                  <textarea ref="editFileName" v-model="file.name" class="" style="display:none" @blur="editFileName(file.id, index, file.name)">
+                  </textarea>
                   <el-popover
                       placement="top"
                       width="160"
@@ -147,8 +150,8 @@
               width="300"
               trigger="click">
             <div class="add-labels">
-              <div class="add-labels-header">
-                Nhãn
+              <div class="add-labels-header" ref="searchLabel">
+                <el-input placeholder="TÌm theo tên nhãn" v-model="search"></el-input>
               </div>
               <div ref="listLabel">
                 <div class="card-action-btn" style="justify-content: center; margin-top: 10px" @click="openFromAddlabel">
@@ -162,7 +165,7 @@
                   <i class="el-icon-edit" style="cursor: pointer" @click="openFromEditlabel(label.name, label.id)"></i>
                 </div>
               </div>
-              <div class="form-add-labels" ref="formAddLabel">
+              <div class="form-add-labels form-add-labels-add" ref="formAddLabel">
                 Tên
                 <br>
                 <input type="text" class="label-name" ref="inputLabel" v-model="labelName">
@@ -179,13 +182,6 @@
                 <div class="labels-color" style="background-color: #344563" @click="selectlabelColor('#344563')"><i class="check-color el-icon-check"></i></div>
                 <el-button class="btn-save-label" type="success" size="small" @click="addLabel">Tạo mới</el-button>
                 <el-button class="btn-save-label" type="info" size="small" @click="cancelFromAddlabel">Hủy</el-button>
-              </div>
-              <div class="form-add-labels" ref="formEditLabel">
-                Tên
-                <br>
-                <input type="text" class="label-name" ref="inputLabel" v-model="labelNameEdit">
-                <el-button class="btn-save-label" type="danger" size="small" @click="handleDeleteLabel(labelId)">Xóa</el-button>
-                <el-button class="btn-save-label" type="info" size="small" @click="cancelFromEditlabel">Huỷ</el-button>
               </div>
             </div>
             <div class="card-action-btn" slot="reference">
@@ -275,6 +271,7 @@ name: "Card",
       labelColor: '',
       cards: [],
       deadline: '',
+      search: '',
       card: [],
       checkListName: '',
       subCheckListName: '',
@@ -288,6 +285,11 @@ name: "Card",
     }
   },
   methods: {
+    submitSearch() {
+      api.search(this.search).then((response) => {
+          this.labels = response.data.data
+      })
+    },
     updateCheckListChild(id, title){
       let data = {
         title: title
@@ -372,6 +374,7 @@ name: "Card",
       }
       if (this.card.description) {
         this.$refs.description.style.display = 'none'
+        this.$refs.descriptionBtn.style.display = 'none'
       }
       this.$refs.cardDescription.style.display = 'block'
     },
@@ -386,7 +389,7 @@ name: "Card",
         });
         this.getDetailCard()
         this.$refs.cardDescription.style.display = 'none'
-        this.$refs.description.style.display = 'block'
+        this.$refs.descriptionBtn.style.display = 'block'
       })
     },
     selectlabelColor(color) {
@@ -618,7 +621,12 @@ name: "Card",
       api.deleteFile(id).then(() => {
         this.getDetailCard()
       })
-    }
+    },
+  },
+  watch: {
+        search: function(){
+            this.submitSearch()
+        }
   },
   mounted() {
     this.getDetailCard()
@@ -627,6 +635,19 @@ name: "Card",
 </script>
 
 <style lang="scss" scoped>
+.btn-edit-child {
+    margin-top: 10px;
+    padding-left: 10px;
+    cursor: pointer;
+    height: 30px;
+    line-height: 30px;
+    i {
+      margin-right: 10px;
+    }
+}
+.btn-edit-child:hover{
+  background-color: rgba(22, 23, 25, 0.12);
+}
 .btn-edit-delete {
         margin-top: 10px!important;
         margin-left: 25px;
@@ -710,7 +731,7 @@ name: "Card",
       margin-bottom: 15px;
     }
     .card-files {
-      width: 115px;
+      width: 80px;
       height: 80px;
       border-radius: 3px;
     }
@@ -736,6 +757,9 @@ name: "Card",
   }
   .add-labels {
     height: auto;
+    .search-label {
+      display: none!important;
+    }
     .add-labels-header {
       display: flex;align-items: center;
       justify-content: center;
@@ -772,6 +796,9 @@ name: "Card",
       .btn-save-label {
         margin-top: 10px;
       }
+    }
+    .form-add-labels-add {
+      display: none;
     }
   }
   .card-action-btn {

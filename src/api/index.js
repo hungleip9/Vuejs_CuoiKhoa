@@ -106,6 +106,12 @@ export default {
             url: '/cards/' + id,
         })
     },
+    search(data) {
+        return apiAxios({
+          method: 'get',
+          url: '/labels?q=' + data,
+        })
+    },
     getLabels() {
         return apiAxios({
             method: 'get',

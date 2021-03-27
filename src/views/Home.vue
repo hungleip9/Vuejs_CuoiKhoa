@@ -24,7 +24,7 @@
           <div class="listWrap add-directory-form" id="addWrap" ref="addListWrap">
             <el-input placeholder="Nhập tiêu đề danh sách..." v-model="directoryName"></el-input>
             <el-button type="success" class="add-list" @click="createList">Thêm danh sách</el-button>
-            <i class="el-icon-close close-add-list" @click="cancelCreateList()"></i>
+            <i class="fa fa-times-circle close-add-list" @click="cancelCreateList()"></i>
           </div>
         </draggable>
       </div>
@@ -148,10 +148,11 @@ export default {
         margin: 7px;
         padding: 7px;
         float: left;
-        color: #ffffff;
+        color: #5e6c84;
         border-radius: 4px;
         cursor: pointer;
-        background-color: $colorBlue;
+        background-color: $colorGray;
+        font-weight: bold;
       }
     }
     .main-content {
@@ -173,13 +174,14 @@ export default {
         .listWrap {
           padding: 10px 8px;
           text-align: left;
-          background-color: $colorBlue;
+          background-color: $colorGray;
           border-radius: 4px;
           width: 272px;
           box-sizing: border-box;
-          color: #ffffff;
+          color: #5e6c84;
           float: left;
           margin-right: 15px;
+          font-weight: bold;
           cursor: pointer;
           //display: inline-block;
         }

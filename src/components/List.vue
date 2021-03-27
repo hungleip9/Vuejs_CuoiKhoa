@@ -26,7 +26,7 @@
       <div class="form-add-card" ref="formAddCard">
         <el-input placeholder="Nhập tiêu đề cho thẻ này..." v-model="cardName"></el-input>
         <el-button type="success" size="small" @click="storeCard">Thêm thẻ</el-button>
-        <i class="el-icon-close" @click="cancelAddCard()"></i>
+        <i class="fa fa-times-circle close-add-card" aria-hidden="true" @click="cancelAddCard()"></i>
       </div>
     </div>
   </div>
@@ -179,6 +179,10 @@ export default {
     float: left;
     margin-right: 10px;
     min-height: 80px;
+    .close-add-card{
+      cursor: pointer;
+      margin-left: 10px;
+    }
     .list-header {
       position: relative;
       font-size: 14px;

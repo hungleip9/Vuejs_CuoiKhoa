@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     profile() {
-      this.$router.push('profile')
+      this.$router.push('/path/home')
     },
     changePassword(formName) {
       this.$refs[formName].validate((valid) => {
@@ -112,8 +112,8 @@ export default {
       margin: 7px;
       padding: 7px;
       float: left;
-      background-color: $colorBlue;
-      color: #ffffff;
+      background-color: $colorGray;
+      color: #5e6c84;
       border-radius: 4px;
       cursor: pointer;
     }

@@ -7,7 +7,7 @@
         </div>
         <div class="avatar" @click="openSetting()">
           <el-avatar>
-            <img v-if="avatarUrl" :src="avatarUrl" alt="" >
+            <img v-if="avatarUrl" :src="avatarUrl" alt="" style="width:38px">
             <img v-else src="../assets/images/default-avatar2.png" alt="">
           </el-avatar>
         </div>
@@ -16,9 +16,9 @@
             Tài khoản
             <hr>
           </div>
-          <div class="user-info">
+          <div class="user-info" @click="openProfile()">
             <el-avatar>
-              <img v-if="avatarUrl" :src="avatarUrl" alt="" >
+              <img v-if="avatarUrl" :src="avatarUrl" alt="" style="width:38px">
               <img v-else src="../assets/images/default-avatar2.png" alt="">
             </el-avatar>
             <div class="name-mail">
@@ -28,9 +28,6 @@
             </div>
           </div>
           <hr>
-          <div class="setting" @click="openProfile()">
-            Cài đặt tài khoản
-          </div>
           <div class="logout" @click="handlelogout()">
             Đăng xuất
           </div>
@@ -106,7 +103,7 @@ export default {
       height: 40px;
       padding: 4px;
       box-sizing: border-box;
-      background-color: $colorBlue;
+      background: rgb(201 212 212 / 47%);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -150,6 +147,7 @@ export default {
           display: flex;
           padding: 4px 0;
           height: 40px;
+          cursor: pointer;
           .name-mail {
             padding: 2px 2px 2px 7px;
             text-align: left;
@@ -165,6 +163,9 @@ export default {
               opacity: 0.5;
             }
           }
+        }
+        .user-info:hover {
+          background-color: #d4d7da;
         }
         .setting, .logout {
           justify-content: left;
