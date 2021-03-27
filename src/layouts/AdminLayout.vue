@@ -96,16 +96,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/styles/variables";
   .container {
     height: 100vh;
-    background-image: url("https://wallpaperaccess.com/full/4584352.jpg");
+    background-image: url("https://advsolutions.vn/wp-content/uploads/2020/01/background-powerpoint-don-gian-20-2.jpg");
     background-size: cover;
     .header {
       width: 100%;
       height: 40px;
       padding: 4px;
       box-sizing: border-box;
-      background-image: linear-gradient(to bottom right, #648455, #5a9e98);
+      background-color: $colorBlue;
       display: flex;
       justify-content: center;
       align-items: center;

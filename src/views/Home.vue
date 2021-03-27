@@ -113,6 +113,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/styles/variables";
   .homeWrap::-webkit-scrollbar {
     width: 8px;
   }
@@ -150,7 +151,7 @@ export default {
         color: #ffffff;
         border-radius: 4px;
         cursor: pointer;
-        background-image: linear-gradient(to bottom right, #648455, #5a9e98);
+        background-color: $colorBlue;
       }
     }
     .main-content {
@@ -172,7 +173,7 @@ export default {
         .listWrap {
           padding: 10px 8px;
           text-align: left;
-          background-image: linear-gradient(to bottom right, #648455, #5a9e98);
+          background-color: $colorBlue;
           border-radius: 4px;
           width: 272px;
           box-sizing: border-box;

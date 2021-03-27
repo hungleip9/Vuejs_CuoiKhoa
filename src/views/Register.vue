@@ -97,6 +97,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/styles/variables";
 .loginWrap {
   width: 444px;
   padding: 24px;
@@ -114,7 +115,7 @@ export default {
     padding: 10px 0;
     font-size: 20px;
     font-weight: bold;
-    color: #328146;
+    color: $colorBlue;
   }
   .inputWrap {
     width: 100%;
@@ -143,7 +144,7 @@ export default {
   .btn-login {
     width: 100%;
     height: 50px;
-    background-image: linear-gradient(to bottom right, #648455, #5a9e98);
+    background-color:$colorBlue;
     color: #ffffff;
     border: 0;
     border-radius: 4px;

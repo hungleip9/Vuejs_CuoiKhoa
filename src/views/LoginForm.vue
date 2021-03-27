@@ -86,11 +86,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/styles/variables";
 .loginWrap {
   width: 444px;
   padding: 24px;
   background-color: #ffffff;
   border-radius: 10px;
+  border: 1px solid gray;
   box-sizing: border-box;
   .logo {
     width: 100%;
@@ -137,13 +139,16 @@ export default {
   .btn-login {
     width: 100%;
     height: 50px;
-    background-image: linear-gradient(to bottom right, #648455, #5a9e98);
+    background-color: $colorBlue;
     color: #ffffff;
     border: 0;
     border-radius: 4px;
     margin-top: 24px;
     outline: none;
     cursor: pointer;
+  }
+  .btn-login:hover {
+    background-color: $colorMellowGreen;
   }
 }
 </style>

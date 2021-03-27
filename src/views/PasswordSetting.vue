@@ -102,6 +102,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/styles/variables";
 .profileWrap {
   height: 95vh;
   .page-header {
@@ -111,7 +112,7 @@ export default {
       margin: 7px;
       padding: 7px;
       float: left;
-      background-image: linear-gradient(to bottom right, #648455, #5a9e98);
+      background-color: $colorBlue;
       color: #ffffff;
       border-radius: 4px;
       cursor: pointer;
@@ -152,7 +153,7 @@ export default {
         .btn-login {
           width: 100%;
           height: 50px;
-          background-image: linear-gradient(to bottom right, #648455, #5a9e98);
+          background-color: $colorBlue;
           color: #ffffff;
           border: 0;
           border-radius: 4px;
