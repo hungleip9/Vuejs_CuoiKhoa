@@ -65,7 +65,7 @@
                 <p @click="openUpdateCheckList(index)" ref="openUpdateCheckList">{{checkList.title}}</p>
                 <textarea ref="updateCheckList" v-model="checkList.title" class="edit-check-list-title"
                         @blur="updateCheckList(checkList.id, index, checkList.title)" style="display:none; width:400px"></textarea>
-                <el-button size="small" style="padding: 5px 10px; margin-left: 5px; float: right" @click="handleDeleteCheckList(checkList.id)" plain>Xóa</el-button>
+                <button class="btn-delete-check-list" @click="deleteCheckList2(checkList.id)">Xóa</button>
               </div>
               <el-progress :percentage="checkPercentComplete(checkList.check_list_childs)" style="margin-bottom: 15px"></el-progress>
               <div class="check-list-childs" v-for="(child, index) in checkList.check_list_childs" :key="index">
@@ -119,7 +119,7 @@
                       <el-button size="mini" type="info" @click="deleteFilePop = false">Hủy</el-button>
                       <el-button type="danger" size="mini" @click="handleDeleteFile(file.id)">Xóa</el-button>
                     </div>
-                    <el-link type="info" slot="reference">Xóa</el-link>
+                    <el-link type="info" slot="reference" @click=" this.deleteFilePop = true">Xóa</el-link>
                   </el-popover>
                   <el-popover
                       placement="top-start"
@@ -425,7 +425,7 @@ name: "Card",
         this.getDetailCard()
       })
     },
-    handleDeleteCheckList(id) {
+    deleteCheckList2(id) {
       api.deleteCheckList(id).then(() => {
         this.getDetailCard()
       })
@@ -694,6 +694,8 @@ name: "Card",
       font-size: 16px;
       font-weight: 600;
       margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
     }
     .card-description {
       width: 100%;
@@ -871,4 +873,14 @@ name: "Card",
       }
     }
   }
+.btn-delete-check-list {
+  border: 1px solid gray;
+  cursor: pointer!important;
+  display: flex;
+  flex-direction: row-reverse;
+  height: 25px;
+  margin-top: 10px;
+  line-height: 22px;
+  border-radius: 5px;
+}
 </style>
