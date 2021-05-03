@@ -76,7 +76,6 @@ export default {
         title: this.directoryName,
         index: this.directories.length + 1
       }
-      console.log(data)
       api.createDirectory(data).then(() => {
         this.$message({
           message: 'Thêm mới thành công!',
@@ -102,7 +101,6 @@ export default {
     getData() {
       api.getDirectories().then((response) => {
         this.directories = response.data.data
-        console.log(response.data.data)
       })
     },
   },

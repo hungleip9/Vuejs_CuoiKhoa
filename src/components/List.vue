@@ -149,6 +149,7 @@ export default {
       this.$emit('reloadDirectories')
     },
     moveCard(e) {
+      let directoryIdFirst = e.draggedContext.element.directory_id
       let id = e.draggedContext.element.id
       let index = e.draggedContext.futureIndex
       let a = e.to.parentElement
@@ -156,10 +157,14 @@ export default {
         index: index,
         directory_id: a.parentElement.getAttribute('id')
       }
-      console.log(data)
-      api.changeCardDirectory(id, data).then(() => {
-
-      })
+      if(directoryIdFirst == a.parentElement.getAttribute('id')) {
+        api.changeCardIndex(id, data).then(() => {
+        })
+      } else {
+        api.changeCardDirectory(id, data).then(() => {
+        })
+      }
+      
     }
   },
   mounted() {
